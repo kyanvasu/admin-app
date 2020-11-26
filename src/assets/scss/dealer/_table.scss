@@ -1,0 +1,110 @@
+.custom-browse-actions {
+    background: white;
+}
+
+.text-gray {
+    color: #ccc;
+}
+
+.divider-v {
+    height: 30px;
+    width: 2px;
+    background: #ccc;
+}
+
+.dealer-table {
+
+    .select-container {
+        width: 155px;
+    }
+
+    .dealer-select {
+            border: 3px solid #ccc;
+            background: white;
+            color: #ccc;
+            border-radius: 0 0 0 0 !important;
+            height: 42px;
+
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    .custom-browse-actions, .custom-pagination-actions {
+        background: white;
+        padding: 10px 0;
+        margin-bottom: 0 !important;
+        border-bottom: 1px solid #eee;
+
+        .form-control {
+            border: 3px solid #ccc;
+            border-radius: 0 0 0 0 !important;
+        }
+
+        .date-range__caller {
+            @extend .dealer-select
+        }
+
+        .dealer-search__button {
+            border-radius: 10px !important;
+        }
+
+        .multiselect {
+            &__tags {
+                border-radius: 3px;
+                border: 3px solid #ccc;
+                height: 42px;
+                padding-top: 8px;
+                border-radius: 0 0 0 0;
+            }
+
+            &__single {
+                font-size: 18px;
+                color: #ccc;
+            }
+        }
+    }
+
+    .custom-pagination-actions {
+        border-bottom: none;
+    }
+
+    .table-container {
+        padding-top: 0;
+    }
+
+    .pagination-controls.pc-top {
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #eee;
+    }
+}
+
+.btn-dealer {
+    border: 1px solid #aaa;
+    background: #ededed;
+    border-radius: 0 0 0 0 !important;
+    text-transform: uppercase;
+    font-weight: bolder;
+    color: #505050 !important;
+    font-size: 14px;
+}
+
+.btn-default-dealer {
+    @extend .btn-dealer;
+    background: transparent;
+    border: none;
+}
+
+.bolder {
+    font-weight: bolder !important;
+}
+
+.dealer-upload {
+    margin-top: 10px;
+    padding: 0 15px 0 15px !important;
+}
+
+.bg-gray {
+    background: #F6F7F9;
+}
