@@ -6,9 +6,11 @@
 @import "~quill/dist/quill.snow.css";
 @import "~quill/dist/quill.bubble.css";
 @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 
 body {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Inter', 'Raleway', sans-serif;
     background-color: rgba(246, 247, 249, 1);
 }
 
@@ -417,5 +419,22 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
 @media only screen and (min-width: 980px) {
     body.menu-pin .page-sidebar {
         width: 280px;
+    }
+}
+
+.kanvas-scroller {
+    &::-webkit-scrollbar-thumb {
+        background-color: transparentize($color: #000000, $amount: 0.9);
+        border-radius: 4px;
+
+        &:hover {
+            background-color: transparentize($color: #000000, $amount: 0.9);
+        }
+    }
+
+    &::-webkit-scrollbar {
+        background-color: transparent;
+        width: 8px;
+        height: 10px;
     }
 }

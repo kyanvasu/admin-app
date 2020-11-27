@@ -33,9 +33,10 @@
 
         <!-- Users -->
         <div class="row section mb-5">
-            <div class="col-md-12">
-                <h4 class="dashboard__section-title"> Users</h4>
-            </div>
+            <section-title
+                class="col-md-12"
+                title="Users"
+            />
             <div class="col-md-12">
                 <statistics-box :statistics="statistics" />
             </div>
@@ -43,40 +44,31 @@
 
         <!-- Usage -->
         <div class="row section">
-            <div class="col-md-12">
-                <h4 class="dashboard__section-title"> Usage</h4>
+            <section-title
+                class="col-md-12"
+                title="Usage"
+            />
+            <div class="col-md-6">
+                <line-graph
+                    title="Active Users"
+                    :chart-data="chartData"
+                />
             </div>
             <div class="col-md-6">
-                <div class="card stat-card">
-                    <header class="stat-card__header d-flex justify-content-between">
-                        <h5 class="stat-card__title">
-                            Leads Overview
-                        </h5>
-                    </header>
-                    <article class="stat-card__content w-100 text-center">
-                        <ve-histogram :data="chartData" />
-                    </article>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card stat-card">
-                    <header class="stat-card__header d-flex justify-content-between">
-                        <h5 class="stat-card__title">
-                            Leads Overview
-                        </h5>
-                    </header>
-                    <article class="stat-card__content w-100 text-center">
-                        <ve-histogram :data="chartData" />
-                    </article>
-                </div>
+                <line-graph
+                    title="Inactive Users"
+                    :chart-data="chartData"
+                />
             </div>
         </div>
 
         <!-- Companies -->
         <div class="row section">
-            <div class="col-md-12">
-                <h4 class="dashboard__section-title"> Companies</h4>
-            </div>
+            <section-title
+                class="col-md-12"
+                title="Companies"
+                action-title="Go to Companies"
+            />
             <div v-for="(stat, index) in statisticsCompanies" :key="`stat-${index}`" class="col-md-4 mb-4">
                 <statistic-line
                     :title="stat.title"
@@ -89,25 +81,29 @@
 
         <!-- Storage -->
         <div class="row section">
+            <section-title
+                class="col-md-12"
+                title="Storage"
+            />
             <div class="col-md-12">
-                <h4 class="dashboard__section-title"> Storage</h4>
-            </div>
-            <div class="col-md-12">
-                <storage-stat></storage-stat>
+                <storage-stat />
             </div>
         </div>
 
         <!-- Third Party Services -->
         <div class="row section">
-            <div class="col-md-12">
-                <h4 class="dashboard__section-title"> Third Party Services</h4>
-            </div> <div v-for="(stat, index) in services" :key="`stat-${index}`" class="col-md-4 mb-4">
+            <section-title
+                class="col-md-12"
+                title="Third Party Services"
+                action-title="Go to App Market"
+            />
+            <div v-for="(stat, index) in services" :key="`stat-${index}`" class="col-md-4 mb-4">
                 <statistic-line
                     :title="stat.title"
-                    :iconClass="stat.iconClass || stat.icon"
+                    :icon-class="stat.iconClass || stat.icon"
                 >
                     <template #icon>
-                        <img :src="stat.icon" class="small-icon"/>
+                        <img :src="stat.icon" class="small-icon">
                     </template>
                     <template #action>
                         <span class="custom-action"> Manage </span>
@@ -123,6 +119,8 @@ import NotificationBox from "@c/organisms/notification-box";
 import StatisticsBox from "@c/organisms/statistics-box";
 import StatisticLine from "@c/organisms/statistic-line";
 import StorageStat from "@c/organisms/storage-stat";
+import LineGraph from "@c/organisms/line-graph";
+import SectionTitle from "@c/molecules/section-title";
 
 export default {
     name: "Home",
@@ -130,17 +128,40 @@ export default {
         NotificationBox,
         StatisticsBox,
         StatisticLine,
-        StorageStat
+        StorageStat,
+        LineGraph,
+        SectionTitle
     },
     data() {
         return {
             chartData: {
-                columns: ["date", "created", "closed"],
-                rows: [{
-                    "date": new Date().getFullYear(),
-                    "created": 25,
-                    closed: 0
-                }]
+                columns: ["date", "amount"],
+                rows: [
+                    {
+                        "date": "July",
+                        "amount": 1000
+                    },
+                    {
+                        "date": "Aug",
+                        "amount": 9000
+                    },
+                    {
+                        "date": "Oct",
+                        "amount": 1200
+                    },
+                    {
+                        "date": "Nov",
+                        "amount": 5000
+                    },
+                    {
+                        "date": "Dec",
+                        "amount": 1000
+                    },
+                    {
+                        "date": "Jan",
+                        "amount": 10000
+                    }
+                ]
             },
             statistics: [
                 {
@@ -217,25 +238,7 @@ export default {
                     title: "AWS",
                     icon: "/images/aws2.png"
                 }
-            ],
-            stats: [{
-                name: "created",
-                title: "Leads Created",
-                count: 33,
-                colorClass: "text-info"
-            },
-            {
-                name: "closed",
-                title: "Leads Closed",
-                count: 0,
-                colorClass: "text-danger"
-            },
-            {
-                name: "sponsored",
-                title: "Agents Sponsored",
-                count: 6,
-                colorClass: "text-success"
-            }]
+            ]
         }
     },
     mounted() {
@@ -283,13 +286,6 @@ export default {
         font-size: 26px;
         font-weight: 600;
         color: var(--accent-color);
-    }
-
-    .dashboard__section-title {
-        font-size: 26px;
-        font-weight: 700;
-        color: var(--text-color);
-        margin-bottom: 1.3rem;
     }
 
     .section {

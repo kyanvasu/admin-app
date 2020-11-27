@@ -1,30 +1,34 @@
 <template>
-    <div class="shadow-card" ref="NotificationBox">
-        <div class="shadow-card__left">
-            <div class="notification-box__icon">
-                <i :class="iconClass" />
-            </div>
-            <div>
-                <div class="notification-box__title">
-                    {{ title }}
-                </div>
-                <div class="notification-box__description">
-                    {{ description }}
-                </div>
-            </div>
-        </div>
+    <div ref="NotificationBox" class="notification-box">
+        <general-box
+            :title="title"
+            :description="description"
+            :icon-class="iconClass"
+            :type="type"
+            :theme-color="themeColor"
+            :border-color="borderColor"
+            :icon-color="iconColor"
+            :action-color="actionColor"
+            @action="openModal"
+        />
+        <notification-modal
+            :icon-class="iconClass"
+        >
 
-        <div class="shadow-card__right">
-            <div class="notification-box__action">
-                <i class="fas fa-ellipsis-v"></i>
-            </div>
-        </div>
+        </notification-modal>
     </div>
 </template>
 
 <script>
+import GeneralBox from "../molecules/general-box";
+import NotificationModal from "../molecules/notification-modal";
+
 export default {
-    props: {
+    components: {
+        GeneralBox,
+        NotificationModal
+    },
+    props:{
         title: {
             type: String,
             required: true
@@ -62,57 +66,26 @@ export default {
             default: "#aaaaaa"
         }
     },
-    mounted() {
-        const documentRoot = this.$refs.NotificationBox;
-        documentRoot.style.setProperty("--title-color", this.titleColor || this.themeColor);
-        documentRoot.style.setProperty("--icon-color", this.iconColor || this.titleColor || this.themeColor);
-        documentRoot.style.setProperty("--border-color", this.borderColor);
-        documentRoot.style.setProperty("--action-color", this.actionColor);
+    methods: {
+        openModal() {
+            this.$modal.show("notification-modal", {
+                title: "Your Plan is suspended",
+                message: "We'll need some information to begin with",
+                buttons: [{
+                    title: "Manage",
+                    class: "btn-danger",
+                    handler: () => {
+                        this.$modal.hide("basic-modal");
+
+                    }
+                }]
+            });
+        }
     }
 
 }
 </script>
 
 <style lang="scss">
-:root {
-    --icon-color: #FD8484;
-    --title-color: #FD8484;
-    --border-color: #FD8484;
-    --action-color: #FD8484;
-}
-.shadow-card {
-    background: white;
-    border-radius: 8px;
-    padding: 1rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid var(--border-color);
 
-    &__left,
-    &__right {
-        display: flex;
-        align-items: center;
-    }
-}
-
-.notification-box {
-    &__title {
-        color: var(--title-color);
-        font-weight: bold;
-    }
-
-    &__description {
-        color: #aaa;
-    }
-
-    &__icon {
-        color: var(--icon-color);
-        margin-right: 15px;
-        font-size: 1.6rem;
-    }
-
-    &__action {
-        color: var(--action-color);
-    }
-}
 </style>

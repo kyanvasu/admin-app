@@ -1,5 +1,5 @@
 <template>
-    <div class="statistics-box">
+    <div class="statistics-box kanvas-scroller">
         <div class="statistics-box__header">
             <div class="statistics-box__date">
                 July, 2020
@@ -13,7 +13,7 @@
             <statistic-item
                 v-for="(stat, index) in statistics"
                 :key="`stat-${index}`"
-                class="pr-5"
+                class="static-item-local pr-5"
                 :title="stat.title"
                 :content="stat.content"
                 :status="stat.status"
@@ -46,6 +46,7 @@ export default {
     color: white;
     border-radius: 8px;
     padding: 1.5rem 2.5rem 3.7rem 2.5rem;
+    overflow-x:auto;
 
     &__header {
         display: flex;
@@ -61,4 +62,18 @@ export default {
     }
 }
 
+
+.static-item-local {
+    position: relative;
+    margin-right: 5%;
+    &:first-child::after {
+        position: absolute;
+        background: white;
+        width: 1px;
+        height: 60%;
+        content: '';
+        top: 20%;
+        right: 4rem;
+    }
+}
 </style>
