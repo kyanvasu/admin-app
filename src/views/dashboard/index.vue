@@ -17,7 +17,10 @@
                     border-color="#FD8484"
                     action-color="#FD8484"
                     icon-class="fas fa-ban"
-                    action=""
+                    @action="openNotificationModal"
+                />
+                <notification-modal
+                    :icon-class="iconClass"
                 />
             </div>
             <div class="col-md-4 my-2">
@@ -120,6 +123,7 @@ import StatisticsBox from "@c/organisms/statistics-box";
 import StatisticLine from "@c/organisms/statistic-line";
 import StorageStat from "@c/organisms/storage-stat";
 import LineGraph from "@c/organisms/line-graph";
+import NotificationModal from "@c/organisms/notification-modal";
 import SectionTitle from "@c/molecules/section-title";
 
 export default {
@@ -130,7 +134,8 @@ export default {
         StatisticLine,
         StorageStat,
         LineGraph,
-        SectionTitle
+        SectionTitle,
+        NotificationModal
     },
     data() {
         return {
@@ -250,6 +255,22 @@ export default {
                 .then(response => {
                     this.stats = response.data;
                 })
+        },
+        openNotificationModal() {
+            this.$modal.show("notification-modal", {
+                title: "Your Plan is suspended",
+                description: "We'll need some information to begin with",
+                message: "In this section we'll figure out all the information related to your ",
+                buttons: [{
+                    title: "Manage Payment",
+                    class: "btn-danger",
+                    iconClass: "fas fa-cancel",
+                    handler: () => {
+                        this.$modal.hide("basic-modal");
+
+                    }
+                }]
+            });
         }
     }
 };

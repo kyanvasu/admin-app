@@ -9,24 +9,17 @@
             :border-color="borderColor"
             :icon-color="iconColor"
             :action-color="actionColor"
-            @action="openModal"
+            @action="$emit('action')"
         />
-        <notification-modal
-            :icon-class="iconClass"
-        >
-
-        </notification-modal>
     </div>
 </template>
 
 <script>
 import GeneralBox from "../molecules/general-box";
-import NotificationModal from "../molecules/notification-modal";
 
 export default {
     components: {
-        GeneralBox,
-        NotificationModal
+        GeneralBox
     },
     props:{
         title: {
@@ -64,22 +57,6 @@ export default {
         actionColor: {
             type: String,
             default: "#aaaaaa"
-        }
-    },
-    methods: {
-        openModal() {
-            this.$modal.show("notification-modal", {
-                title: "Your Plan is suspended",
-                message: "We'll need some information to begin with",
-                buttons: [{
-                    title: "Manage",
-                    class: "btn-danger",
-                    handler: () => {
-                        this.$modal.hide("basic-modal");
-
-                    }
-                }]
-            });
         }
     }
 
