@@ -60,7 +60,7 @@ import { mapActions, mapGetters, mapState } from "vuex";
 import AfterSignupWizard from "@/components/organisms/modals/after-signup-wizard";
 import BasicModal from "@/components/organisms/modals/basic-modal";
 import SubscriptionBar from "@/views/layout/subscription-bar";
-import FullscreenLoader from "@c/fullscreen-loader";
+import FullscreenLoader from "@c/molecules/fullscreen-loader";
 import NotificationCenter from "@/views/layout/notification-center";
 
 export default {

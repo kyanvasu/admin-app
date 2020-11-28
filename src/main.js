@@ -3,8 +3,8 @@ import App from "./App.vue";
 import "./config";
 import store from "./store";
 import router from "./router";
-import "@/components/global-styles";
-import "@/components/global";
+import "@/config/global-styles";
+import "@/config/global";
 
 Vue.config.productionTip = false;
 

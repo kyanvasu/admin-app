@@ -120,7 +120,7 @@ const router = new Router({
         {
             path: "/auth/facebook",
             name: "facebook-auth",
-            component: () => import(/* webpackChunkName: "facebook-auth" */ "@c/social-auth"),
+            component: () => import(/* webpackChunkName: "facebook-auth" */ "@c/molecules/social-auth"),
             meta: {
                 requiresAuth: false
             }
