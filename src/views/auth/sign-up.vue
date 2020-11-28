@@ -107,7 +107,7 @@
 
 <script>
 import authMixins from "@/mixins/auth";
-import InputPassword from "@c/input-password.vue";
+import InputPassword from "@c/molecules/input-password.vue";
 
 export default {
     name: "SignUp",

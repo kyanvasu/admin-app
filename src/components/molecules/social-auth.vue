@@ -7,8 +7,8 @@
 
 <script>
 
-import facebookAuth from "@c/facebook-auth.vue";
-import googleAuth from "@c/google-auth.vue";
+import facebookAuth from "@c/molecules/facebook-auth.vue";
+import googleAuth from "@c/molecules/google-auth.vue";
 import authMixins from "@/mixins/auth";
 
 export default {

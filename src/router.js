@@ -113,9 +113,14 @@ const router = new Router({
             component: createResource
         },
         {
+            path: "/apps",
+            name: "apps",
+            component: () => import(/* webpackChunkName: "error-403" */ "./views/app-manager"),
+        },
+        {
             path: "/auth/facebook",
             name: "facebook-auth",
-            component: () => import(/* webpackChunkName: "facebook-auth" */ "@c/social-auth"),
+            component: () => import(/* webpackChunkName: "facebook-auth" */ "@c/molecules/social-auth"),
             meta: {
                 requiresAuth: false
             }

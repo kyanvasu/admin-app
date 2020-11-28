@@ -11,7 +11,7 @@ import VueMultiselect from "vue-multiselect";
 import Notifications from "vue-notification";
 import VModal from "vue-js-modal";
 import Dropdown from "bp-vuejs-dropdown";
-import Loader from "@c/loader";
+import Loader from "@c/atoms/loader";
 import VueGoogleApi from "vue-google-api"
 
 const config = {
