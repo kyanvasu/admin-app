@@ -27,6 +27,7 @@ export default {
 
 <style lang="scss" scoped>
 .kanvas-section {
+    --text-color: #707070;
     .section-title {
         font-size: 26px;
         font-weight: 700;

@@ -9,7 +9,7 @@
                 <i :class="iconClass" />
             </slot>
         </div>
-        <div class="general-box__title">
+        <div class="square-action-box__title">
             {{ title }}
         </div>
     </div>
@@ -69,7 +69,7 @@ export default {
 <style lang="scss">
 :root {
     --background-color: white;
-    --title-color: #909090;
+    --title-color: #707070;
     --border-color: #dddddd;
     --action-color: #FD8484;
 }
@@ -78,12 +78,11 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    max-width: 222px;
+    min-width: 222px;
     border-radius: 8px;
-    padding: 1rem 2rem;
+    padding: 1.9rem 2rem;
     background: var(--background-color);
     justify-content: space-between;
-    border: 1px solid var(--border-color);
     box-shadow: 4px 4px 4px #9090904A;
 
     &__action {
@@ -91,22 +90,10 @@ export default {
         cursor: pointer;
         margin-bottom: 14px;
     }
-}
 
-.general-box {
     &__title {
         color: var(--title-color);
         font-weight: bold;
-    }
-
-    &__description {
-        color: #aaa;
-    }
-
-    &__icon {
-        color: var(--icon-color);
-        margin-right: 15px;
-        font-size: 1.6rem;
     }
 }
 </style>

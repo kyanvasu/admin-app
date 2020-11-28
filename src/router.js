@@ -115,7 +115,7 @@ const router = new Router({
         {
             path: "/apps",
             name: "apps",
-            component: () => import(/* webpackChunkName: "error-403" */ "./views/apps"),
+            component: () => import(/* webpackChunkName: "error-403" */ "./views/app-manager"),
         },
         {
             path: "/auth/facebook",
