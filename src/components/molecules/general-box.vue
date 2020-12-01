@@ -1,5 +1,10 @@
 <template>
-    <div ref="GeneralBox" class="shadow-card">
+    <div
+        ref="GeneralBox"
+        class="shadow-card"
+        :class="{clickable: clickable, selected: selected}"
+        @click="$emit('click')"
+    >
         <div class="shadow-card__left">
             <div v-if="iconClass" class="general-box__icon">
                 <slot name="icon">
@@ -16,7 +21,7 @@
             </div>
         </div>
 
-        <div class="shadow-card__right" @click.stop="$emit('action')">
+        <div v-if="showAction" class="shadow-card__right" @click.stop="$emit('action')">
             <div class="general-box__action">
                 <slot name="action">
                     <i class="fas fa-ellipsis-v" />
@@ -64,6 +69,18 @@ export default {
         actionColor: {
             type: String,
             default: "#aaaaaa"
+        },
+        clickable: {
+            type: Boolean,
+            default: false
+        },
+        selected: {
+            type: Boolean,
+            default: false
+        },
+        showAction: {
+            type: Boolean,
+            default: true
         }
     },
     mounted() {
@@ -91,15 +108,21 @@ export default {
     display: flex;
     justify-content: space-between;
     border: 1px solid var(--border-color);
+    transition: all ease .3s;
 
     &__left,
     &__right {
         display: flex;
         align-items: center;
     }
+
+    &.clickable {
+        cursor: pointer;
+    }
 }
 
 .general-box {
+
     &__title {
         color: var(--title-color);
         font-weight: bold;

@@ -1,7 +1,7 @@
 <template>
     <div class="card-action">
         <p class="card-action__icon">
-            <i class="fas fa-mobile-alt" />
+            <i :class="iconClass" />
         </p>
         <p class="card-action__title">
             {{ title }}
@@ -26,6 +26,10 @@
 <script>
 export default {
     props: {
+        iconClass: {
+            type: String,
+            default: "fas fa-mobile-alt"
+        },
         title: {
             type: String
         },

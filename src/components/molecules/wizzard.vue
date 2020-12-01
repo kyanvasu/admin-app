@@ -28,11 +28,7 @@
             </div>
         </div>
         <div class="display">
-            <div v-for="(step, index) in steps" :key="`display-${step.title}`">
-                <template v-if="value == index">
-                    <slot />
-                </template>
-            </div>
+            <slot />
         </div>
     </div>
 </template>
@@ -49,12 +45,13 @@ export default {
     },
     data() {
         return {
-            localValue: 0
+            localValue: 0,
+            tabs: null
         }
     },
     watch: {
         localValue() {
-            return this.$emit("input", this.localValue)
+            this.$emit("input", this.localValue)
         },
         value() {
             if (this.value != this.localValue) {
@@ -62,20 +59,46 @@ export default {
             }
         }
     },
+    mounted() {
+        this.tabs = this.$slots.default.map(value => value.componentInstance);
+        this.setActiveTab(this.localValue);
+    },
     methods: {
         next() {
             if (this.localValue < this.steps.length - 1) {
-                this.localValue++
-            }
-        },
-        handleClick(index) {
-            if (index <= this.value) {
-                this.localValue = index;
+                this.setActiveTab(this.localValue + 1);
+            } else {
+                this.$emit("finished", this.localValue)
             }
         },
         previous() {
             if (this.localValue > 0) {
-                this.localValue--
+                const newValue = this.localValue - 1
+                this.setActiveTab(newValue)
+            }
+        },
+
+        handleClick(index) {
+            if (index <= this.value) {
+                this.setActiveTab(index);
+            }
+        },
+        setActiveTab(currentIndex) {
+            const oldIndex = this.localValue;
+            this.localValue = currentIndex;
+
+            if (this.tabs[oldIndex].beforeChange) {
+                this.beforeChange()
+            }
+
+            if (oldIndex >= 0) {
+                this.tabs[oldIndex].changeActive(false)
+            }
+
+            this.tabs[currentIndex].changeActive(true);
+
+            if (this.tabs[oldIndex].afterChange) {
+                this.afterChange()
             }
         }
     }
