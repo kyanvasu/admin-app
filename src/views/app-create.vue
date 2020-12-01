@@ -10,17 +10,20 @@
                 footer-note="Build your web project using our Baka Packages and Kanvas project to save energy and time"
                 @action="toggleCreating"
             />
-            <form-wizzard
+            <form-wizard
                 v-else-if="isCreating"
-                ref="Wizzard"
+                ref="Wizard"
                 v-model="step"
+                class="app-wizard"
                 :steps="steps"
                 @finished="sendData"
             >
-                <form-wizzard-tab
+                <!-- Info tab -->
+                <form-wizard-tab
                     name="info"
                     title="Project Information"
                     description="Select a project type to get started"
+                    :before-change="validateFirst"
                 >
                     <div>
                         <general-box
@@ -37,12 +40,14 @@
                             @click="formData.selectedProject=projectType"
                         />
                     </div>
-                </form-wizzard-tab>
+                </form-wizard-tab>
 
-                <form-wizzard-tab
+                <!-- Development tab -->
+                <form-wizard-tab
                     name="development"
                     title="Development Settings"
                     description="Select your development setup"
+                    :before-change="validateSecond"
                 >
                     <div>
                         <general-box
@@ -59,26 +64,47 @@
                             @click="formData.developmentSetup=setup"
                         />
                     </div>
-                </form-wizzard-tab>
+                </form-wizard-tab>
 
-                <form-wizzard-tab
+                <!-- Description Tab -->
+                <form-wizard-tab
                     name="description"
-                    title="Let's talk about your project"
-                    description="Select a project type to get started"
-                />
+                >
+                    <description-wizard
+                        ref="DescriptionWizard"
+                        :form-data="formData"
+                        @finished="$refs.Wizard.next()"
+                        @reset="$refs.Wizard.previous()"
+                    />
+                </form-wizard-tab>
 
-                <form-wizzard-tab
+                <!-- Data Magagement Tab -->
+                <form-wizard-tab
                     name="data"
-                    title="What about the data"
-                    description="Select a project type to get started"
-                />
+                >
+                    <data-management-wizard
+                        ref="DataManagementWizard"
+                        :form-data="formData"
+                        :filesystems="filesystems"
+                        @finished="$refs.Wizard.next()"
+                        @reset="$refs.Wizard.previous()"
+                    />
+                </form-wizard-tab>
 
-                <form-wizzard-tab
+                <!-- Auth Tab -->
+                <form-wizard-tab
                     name="auth"
-                    title="Now some serious stuff"
-                    description="Select a project type to get started"
-                />
-            </form-wizzard>
+                >
+                    <auth-wizard
+                        ref="AuthWizard"
+                        :auth-managers="authManagers"
+                        :auth-users="authUsersMethods"
+                        :form-data="formData"
+                        @finished="$refs.Wizard.next()"
+                        @reset="$refs.Wizard.previous()"
+                    />
+                </form-wizard-tab>
+            </form-wizard>
 
             <card-action
                 v-if="isSaved"
@@ -92,14 +118,23 @@
         </div>
 
         <div v-if="isCreating" class="buttons-container">
+            <button class="btn btn-primary mr-3" v-if="[2,3,4].includes(step)" @click="previousNested()">
+                Back
+            </button>
+
             <button
-                v-if="step>0"
+                v-else-if="step>0"
                 class="btn btn-primary mr-3"
-                @click="$refs.Wizzard.previous()"
+                @click="$refs.Wizard.previous()"
             >
                 Back
             </button>
-            <button class="btn btn-primary" @click="$refs.Wizzard.next()">
+
+            <button class="btn btn-primary" v-if="[2,3,4].includes(step)" @click="nextNested()">
+                {{ continueButtonText }}
+            </button>
+
+            <button class="btn btn-primary" v-else @click="$refs.Wizard.next()">
                 {{ continueButtonText }}
             </button>
         </div>
@@ -108,16 +143,22 @@
 
 <script>
 import CardAction from "@c/molecules/card-action.vue";
-import FormWizzard from "@c/molecules/wizzard.vue";
-import FormWizzardTab from "@c/molecules/wizzard-tab.vue";
+import FormWizard from "@c/molecules/wizard.vue";
+import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
+import DescriptionWizard from "@c/templates/wizard-description.vue";
+import AuthWizard from "@c/templates/wizard-auth.vue";
+import DataManagementWizard from "@c/templates/wizard-data-management.vue";
 
 export default {
     components: {
         CardAction,
-        FormWizzard,
-        FormWizzardTab,
-        GeneralBox
+        FormWizard,
+        FormWizardTab,
+        GeneralBox,
+        DescriptionWizard,
+        AuthWizard,
+        DataManagementWizard
     },
     data() {
         return {
@@ -151,16 +192,31 @@ export default {
             step: 0,
             formData: {
                 selectedProject: "",
-                developmentSetup: ""
+                developmentSetup: "",
+                filesystem: "",
+                authManager: "",
+                authUsersMethod: ""
 
             },
             projectTypes: ["web", "mobile", "both"],
-            developmentSetups: ["php", "js"]
+            developmentSetups: ["php", "js"],
+            filesystems: ["local", "s3"],
+            authManagers: ["Public", "Payment", "Kanvas Auth"],
+            authUsersMethods: ["Public", "Kanvas Auth", "Payment"]
         }
     },
     computed: {
         continueButtonText() {
             return this.step == this.steps.length - 1 ? "Finish" : "Continue";
+        },
+        refName() {
+            const refsNames = {
+                2: "DescriptionWizard",
+                3: "DataManagementWizard",
+                4: "AuthWizard"
+            }
+
+            return refsNames[this.step];
         }
     },
     methods: {
@@ -171,6 +227,25 @@ export default {
             this.isSaved = true;
             this.isCreating = false;
         },
+        validateFirst() {
+            if (this.formData.selectedProject) {
+                return true;
+            }
+        },
+        validateSecond() {
+            if (this.formData.developmentSetup) {
+                return true;
+            }
+        },
+
+        nextNested() {
+            this.$refs[this.refName].next()
+        },
+
+        previousNested() {
+            this.$refs[this.refName].previous()
+        },
+
         goToDashboard() {
 
         }
@@ -203,5 +278,9 @@ export default {
 
 .project-types {
     margin-bottom: 20px;
+}
+
+.app-wizard {
+    padding: 24px 48px;
 }
 </style>
