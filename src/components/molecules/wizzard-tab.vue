@@ -1,14 +1,12 @@
 <template>
     <div v-show="active" class="wizzard-tab">
-        <h4 class="wizzard-tab__title">
+        <h4 v-if="title" class="wizzard-tab__title">
             {{ title }}
         </h4>
-        <p class="wizzard-tab__description">
+        <p v-if="description" class="wizzard-tab__description">
             {{ description }}
         </p>
-        <slot>
-
-        </slot>
+        <slot />
     </div>
 </template>
 
@@ -26,6 +24,9 @@ export default {
         description: {
             type: String,
             default: ""
+        },
+        beforeChange: {
+            type: Function
         }
     },
     data() {

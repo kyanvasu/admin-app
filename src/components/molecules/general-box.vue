@@ -87,6 +87,7 @@ export default {
         const documentRoot = this.$refs.GeneralBox;
         documentRoot.style.setProperty("--title-color", this.titleColor || this.themeColor);
         documentRoot.style.setProperty("--icon-color", this.iconColor || this.titleColor || this.themeColor);
+        documentRoot.style.setProperty("--theme-color", this.themeColor);
         documentRoot.style.setProperty("--border-color", this.borderColor);
         documentRoot.style.setProperty("--action-color", this.actionColor);
     }
@@ -118,6 +119,10 @@ export default {
 
     &.clickable {
         cursor: pointer;
+    }
+
+    &.selected {
+        border: 1px solid var(--theme-color);
     }
 }
 

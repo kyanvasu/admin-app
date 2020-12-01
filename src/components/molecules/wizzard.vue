@@ -1,6 +1,6 @@
 <template>
     <div class="wizzard">
-        <div class="steps">
+        <div v-if="showSteps" class="steps">
             <div
                 v-for="(step, index) in steps"
                 :key="step.title"
@@ -27,7 +27,7 @@
                 </div>
             </div>
         </div>
-        <div class="display">
+        <div class="display" :class="{full: showSteps}">
             <slot />
         </div>
     </div>
@@ -37,15 +37,20 @@
 export default {
     props: {
         value: {
-            type: Number
+            type: Number,
+            default: 0
         },
         steps: {
             type: Array
+        },
+        showSteps: {
+            type: Boolean,
+            default: true
         }
     },
     data() {
         return {
-            localValue: 0,
+            localValue: null,
             tabs: null
         }
     },
@@ -61,7 +66,7 @@ export default {
     },
     mounted() {
         this.tabs = this.$slots.default.map(value => value.componentInstance);
-        this.setActiveTab(this.localValue);
+        this.setActiveTab(this.value);
     },
     methods: {
         next() {
@@ -73,8 +78,9 @@ export default {
         },
         previous() {
             if (this.localValue > 0) {
-                const newValue = this.localValue - 1
-                this.setActiveTab(newValue)
+                this.setActiveTab(this.localValue - 1)
+            } else {
+                this.$emit("reset");
             }
         },
 
@@ -85,20 +91,20 @@ export default {
         },
         setActiveTab(currentIndex) {
             const oldIndex = this.localValue;
-            this.localValue = currentIndex;
 
-            if (this.tabs[oldIndex].beforeChange) {
-                this.beforeChange()
-            }
 
-            if (oldIndex >= 0) {
+            if (oldIndex >= 0 && this.tabs[oldIndex]) {
+                if (this.tabs[oldIndex].beforeChange && !this.tabs[oldIndex].beforeChange()) {
+                    return
+                }
                 this.tabs[oldIndex].changeActive(false)
             }
 
+            this.localValue = currentIndex;
             this.tabs[currentIndex].changeActive(true);
 
-            if (this.tabs[oldIndex].afterChange) {
-                this.afterChange()
+            if (this.tabs[currentIndex].afterChange) {
+                this.tabs[currentIndex].afterChange()
             }
         }
     }
@@ -107,8 +113,8 @@ export default {
 
 <style lang="scss" scoped>
     .wizzard {
-        padding: 24px 48px;
         height: 100%;
+        width: 100%;
         display: flex;
         flex-direction: column;
     }
@@ -204,6 +210,9 @@ export default {
     .display {
         width: 100%;
         height: 100%;
-        margin-top: 60px;
+
+        &.full {
+            margin-top: 60px;
+        }
     }
 </style>

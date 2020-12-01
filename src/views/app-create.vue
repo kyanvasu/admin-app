@@ -14,13 +14,16 @@
                 v-else-if="isCreating"
                 ref="Wizzard"
                 v-model="step"
+                class="app-wizard"
                 :steps="steps"
                 @finished="sendData"
             >
+                <!-- Info tab -->
                 <form-wizzard-tab
                     name="info"
                     title="Project Information"
                     description="Select a project type to get started"
+                    :before-change="validateFirst"
                 >
                     <div>
                         <general-box
@@ -39,10 +42,12 @@
                     </div>
                 </form-wizzard-tab>
 
+                <!-- Development tab -->
                 <form-wizzard-tab
                     name="development"
                     title="Development Settings"
                     description="Select your development setup"
+                    :before-change="validateSecond"
                 >
                     <div>
                         <general-box
@@ -61,23 +66,44 @@
                     </div>
                 </form-wizzard-tab>
 
+                <!-- Description Tab -->
                 <form-wizzard-tab
                     name="description"
-                    title="Let's talk about your project"
-                    description="Select a project type to get started"
-                />
+                >
+                    <description-wizzard
+                        ref="DescriptionWizzard"
+                        :form-data="formData"
+                        @finished="$refs.Wizzard.next()"
+                        @reset="$refs.Wizzard.previous()"
+                    />
+                </form-wizzard-tab>
 
+                <!-- Data Magagement Tab -->
                 <form-wizzard-tab
                     name="data"
-                    title="What about the data"
-                    description="Select a project type to get started"
-                />
+                >
+                    <data-management-wizzard
+                        ref="DataManagementWizzard"
+                        :form-data="formData"
+                        :filesystems="filesystems"
+                        @finished="$refs.Wizzard.next()"
+                        @reset="$refs.Wizzard.previous()"
+                    />
+                </form-wizzard-tab>
 
+                <!-- Auth Tab -->
                 <form-wizzard-tab
                     name="auth"
-                    title="Now some serious stuff"
-                    description="Select a project type to get started"
-                />
+                >
+                    <auth-wizzard
+                        ref="AuthWizzard"
+                        :auth-managers="authManagers"
+                        :auth-users="authUsersMethods"
+                        :form-data="formData"
+                        @finished="$refs.Wizzard.next()"
+                        @reset="$refs.Wizzard.previous()"
+                    />
+                </form-wizzard-tab>
             </form-wizzard>
 
             <card-action
@@ -92,14 +118,23 @@
         </div>
 
         <div v-if="isCreating" class="buttons-container">
+            <button class="btn btn-primary mr-3" v-if="[2,3,4].includes(step)" @click="previousNested()">
+                Back
+            </button>
+
             <button
-                v-if="step>0"
+                v-else-if="step>0"
                 class="btn btn-primary mr-3"
                 @click="$refs.Wizzard.previous()"
             >
                 Back
             </button>
-            <button class="btn btn-primary" @click="$refs.Wizzard.next()">
+
+            <button class="btn btn-primary" v-if="[2,3,4].includes(step)" @click="nextNested()">
+                {{ continueButtonText }}
+            </button>
+
+            <button class="btn btn-primary" v-else @click="$refs.Wizzard.next()">
                 {{ continueButtonText }}
             </button>
         </div>
@@ -111,13 +146,19 @@ import CardAction from "@c/molecules/card-action.vue";
 import FormWizzard from "@c/molecules/wizzard.vue";
 import FormWizzardTab from "@c/molecules/wizzard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
+import DescriptionWizzard from "@c/templates/wizzard-description.vue";
+import AuthWizzard from "@c/templates/wizzard-auth.vue";
+import DataManagementWizzard from "@c/templates/wizzard-data-management.vue";
 
 export default {
     components: {
         CardAction,
         FormWizzard,
         FormWizzardTab,
-        GeneralBox
+        GeneralBox,
+        DescriptionWizzard,
+        AuthWizzard,
+        DataManagementWizzard
     },
     data() {
         return {
@@ -151,16 +192,31 @@ export default {
             step: 0,
             formData: {
                 selectedProject: "",
-                developmentSetup: ""
+                developmentSetup: "",
+                filesystem: "",
+                authManager: "",
+                authUsersMethod: ""
 
             },
             projectTypes: ["web", "mobile", "both"],
-            developmentSetups: ["php", "js"]
+            developmentSetups: ["php", "js"],
+            filesystems: ["local", "s3"],
+            authManagers: ["Public", "Payment", "Kanvas Auth"],
+            authUsersMethods: ["Public", "Kanvas Auth", "Payment"]
         }
     },
     computed: {
         continueButtonText() {
             return this.step == this.steps.length - 1 ? "Finish" : "Continue";
+        },
+        refName() {
+            const refsNames = {
+                2: "DescriptionWizzard",
+                3: "DataManagementWizzard",
+                4: "AuthWizzard"
+            }
+
+            return refsNames[this.step];
         }
     },
     methods: {
@@ -171,6 +227,25 @@ export default {
             this.isSaved = true;
             this.isCreating = false;
         },
+        validateFirst() {
+            if (this.formData.selectedProject) {
+                return true;
+            }
+        },
+        validateSecond() {
+            if (this.formData.developmentSetup) {
+                return true;
+            }
+        },
+
+        nextNested() {
+            this.$refs[this.refName].next()
+        },
+
+        previousNested() {
+            this.$refs[this.refName].previous()
+        },
+
         goToDashboard() {
 
         }
@@ -203,5 +278,9 @@ export default {
 
 .project-types {
     margin-bottom: 20px;
+}
+
+.app-wizard {
+    padding: 24px 48px;
 }
 </style>
