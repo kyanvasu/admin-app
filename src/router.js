@@ -84,7 +84,10 @@ const router = new Router({
         {
             path: "*",
             name: "404",
-            component: () => import(/* webpackChunkName: "error-404" */ "./views/errors/error-404"),
+            component: () =>
+                import(
+                    /* webpackChunkName: "error-404" */ "./views/errors/error-404"
+                ),
             meta: {
                 requiresAuth: false
             }
@@ -92,7 +95,10 @@ const router = new Router({
         {
             path: "/forbidden",
             name: "403",
-            component: () => import(/* webpackChunkName: "error-403" */ "./views/errors/error-403"),
+            component: () =>
+                import(
+                    /* webpackChunkName: "error-403" */ "./views/errors/error-403"
+                ),
             meta: {
                 requiresAuth: false
             }
@@ -115,12 +121,26 @@ const router = new Router({
         {
             path: "/apps",
             name: "apps",
-            component: () => import(/* webpackChunkName: "error-403" */ "./views/app-manager"),
+            component: () =>
+                import(
+                    /* webpackChunkName: "apps-manager" */ "./views/app-manager"
+                )
+        },
+        {
+            path: "/apps/create",
+            name: "apps-create",
+            component: () =>
+                import(
+                    /* webpackChunkName: "apps-create" */ "./views/app-create"
+                )
         },
         {
             path: "/auth/facebook",
             name: "facebook-auth",
-            component: () => import(/* webpackChunkName: "facebook-auth" */ "@c/molecules/social-auth"),
+            component: () =>
+                import(
+                    /* webpackChunkName: "facebook-auth" */ "@c/molecules/social-auth"
+                ),
             meta: {
                 requiresAuth: false
             }
@@ -132,13 +152,15 @@ router.addRoutes(GwSettingsRoutes);
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth !== false)) {
-        routerValidator(to, from).then((routeToGo) => {
-            if (_isEqual(routeToGo, to)) {
-                next();
-            } else {
-                next(routeToGo);
-            }
-        }).catch((routeToGo) => next(routeToGo));
+        routerValidator(to, from)
+            .then(routeToGo => {
+                if (_isEqual(routeToGo, to)) {
+                    next();
+                } else {
+                    next(routeToGo);
+                }
+            })
+            .catch(routeToGo => next(routeToGo));
     } else {
         next();
     }

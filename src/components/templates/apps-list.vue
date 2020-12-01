@@ -12,6 +12,7 @@
                         title="Create new app"
                         icon-class="fa fa-plus"
                         background-color="#D3D1FF"
+                        @action="createApp"
                     >
                         <template #icon>
                             <div class="square-icon">
@@ -20,6 +21,7 @@
                         </template>
                     </square-action-box>
                 </div>
+
                 <div v-for="(app, index) in recentApps" :key="`recent-app-${index}`" class="col-md-4 d-flex justify-content-center mb-4">
                     <square-action-box
                         :title="app.name"
@@ -97,6 +99,13 @@ export default {
                     icon: "/images/aws2.png"
                 }
             ]
+        }
+    },
+    methods: {
+        createApp() {
+            this.$router.push({
+                name: "apps-create"
+            })
         }
     }
 }

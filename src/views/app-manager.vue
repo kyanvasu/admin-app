@@ -4,7 +4,8 @@
 
 <script>
 import AppsTemplate from "@c/templates/apps-list";
-import { mapState } from "vuex"
+import { mapState } from "vuex";
+
 export default {
     components: {
         AppsTemplate
@@ -14,13 +15,8 @@ export default {
             appList: state => state.Application.apps
         }),
         recentApps() {
-            return this.appList.slice(0,2)
+            return this.appList.slice(0, 2);
         }
     }
-
-}
+};
 </script>
-
-<style>
-
-</style>
