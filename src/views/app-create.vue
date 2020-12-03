@@ -1,6 +1,7 @@
 <template>
     <div class="main container">
         <div class="apps-create__container">
+            <!-- Welcome card -->
             <card-action
                 v-if="!isCreating && !isSaved"
                 title="Let's create a new project"
@@ -10,6 +11,9 @@
                 footer-note="Build your web project using our Baka Packages and Kanvas project to save energy and time"
                 @action="toggleCreating"
             />
+            <!-- End of welcome card -->
+
+            <!-- Wizard -->
             <form-wizard
                 v-else-if="isCreating"
                 ref="Wizard"
@@ -23,7 +27,7 @@
                     name="info"
                     title="Project Information"
                     description="Select a project type to get started"
-                    :before-change="validateFirst"
+                    :before-change="validateFields.bind(null, ['selectedProject'])"
                 >
                     <div>
                         <general-box
@@ -39,6 +43,7 @@
                             :class="{selected: formData.selectedProject == project.name}"
                             @click="formData.selectedProject=project.name"
                         />
+                        <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
                     </div>
                 </form-wizard-tab>
 
@@ -47,7 +52,7 @@
                     name="development"
                     title="Development Settings"
                     description="Select your development setup"
-                    :before-change="validateSecond"
+                    :before-change="validateFields.bind(null, ['developmentSetup'])"
                 >
                     <div>
                         <general-box
@@ -63,6 +68,7 @@
                             :class="{selected: formData.developmentSetup == setup.name}"
                             @click="formData.developmentSetup=setup.name"
                         />
+                        <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
                     </div>
                 </form-wizard-tab>
 
@@ -105,7 +111,9 @@
                     />
                 </form-wizard-tab>
             </form-wizard>
+            <!--  end of creation wizard -->
 
+            <!-- Finish card -->
             <card-action
                 v-if="isSaved"
                 icon-class="far fa-check-circle"
@@ -115,8 +123,10 @@
                 action-button-text="Go to dashboard"
                 @action="goToDashboard"
             />
+            <!-- End of finish card -->
         </div>
 
+        <!-- Controls -->
         <div v-if="isCreating" class="buttons-container">
             <button class="btn btn-primary mr-3" v-if="[2,3,4].includes(step)" @click="previousNested()">
                 Back
@@ -138,6 +148,7 @@
                 {{ continueButtonText }}
             </button>
         </div>
+        <!-- End of controls -->
     </div>
 </template>
 
@@ -149,6 +160,7 @@ import GeneralBox from "@c/molecules/general-box";
 import DescriptionWizard from "@c/templates/wizard-description.vue";
 import AuthWizard from "@c/templates/wizard-auth.vue";
 import DataManagementWizard from "@c/templates/wizard-data-management.vue";
+import { wizardMixins } from "@/utils/mixins";
 
 export default {
     components: {
@@ -160,6 +172,7 @@ export default {
         AuthWizard,
         DataManagementWizard
     },
+    mixins: [wizardMixins],
     data() {
         return {
             isCreating: false,
@@ -193,7 +206,14 @@ export default {
             formData: {
                 selectedProject: "",
                 developmentSetup: "",
+                name: "",
+                description:"",
+                mainColor: "",
+                secondaryColor:"",
                 filesystem: "",
+                language: "",
+                timezone: "",
+                currency: "",
                 authManager: "",
                 authUsersMethod: ""
 
@@ -253,16 +273,6 @@ export default {
         sendData() {
             this.isSaved = true;
             this.isCreating = false;
-        },
-        validateFirst() {
-            if (this.formData.selectedProject) {
-                return true;
-            }
-        },
-        validateSecond() {
-            if (this.formData.developmentSetup) {
-                return true;
-            }
         },
 
         nextNested() {

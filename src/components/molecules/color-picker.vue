@@ -1,5 +1,5 @@
 <template>
-    <div class="color-picker" ref="ColorPicker">
+    <div ref="ColorPicker" class="color-picker">
         <input
             type="text"
             readonly
@@ -15,7 +15,7 @@
             type="color"
             class="color-picker__picker"
         >
-        <div class="color-picker__preview" @click="$refs.Picker.click()"/>
+        <div class="color-picker__preview" @click="$refs.Picker.click()" />
     </div>
 </template>
 
@@ -33,10 +33,18 @@ export default {
         }
     },
     watch: {
+        value() {
+            if (this.value != this.localValue) {
+                this.localValue = this.value;
+            }
+        },
         localValue: {
             handler() {
                 const documentRoot = this.$refs.ColorPicker;
                 documentRoot && documentRoot.style.setProperty("--selected-color", this.localValue);
+                if (this.value != this.localValue) {
+                    this.$emit("input", this.localValue);
+                }
             },
             immediate: true
         }

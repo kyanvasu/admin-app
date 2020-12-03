@@ -438,3 +438,13 @@ body.sidebar-visible .page-sidebar .sidebar-header .sidebar-header-controls {
         height: 10px;
     }
 }
+
+.multiselect {
+
+    .multiselect__tags {
+        border: none;
+        border-radius: 0 0 0 0;
+        padding-left: 0;
+        border-bottom: 1px solid #C9C9C9;
+    }
+}

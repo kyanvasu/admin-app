@@ -9,9 +9,10 @@
     >
         <!-- filesystem data-->
         <form-wizard-tab
-            name="data1"
+            name="filesystem"
             title="What about the data"
             description="Select a project type to get started"
+            :before-change="validateFields.bind(null, ['filesystem'])"
         >
             <div>
                 <general-box
@@ -27,20 +28,32 @@
                     :selected="formData.filesystem == filesystem"
                     @click="formData.filesystem=filesystem"
                 />
+                <small v-if="isInvalid" class="text-danger"> This field is required </small>
             </div>
         </form-wizard-tab>
         <!-- End of filesystem data -->
 
         <!-- language data -->
         <form-wizard-tab
-            name="data2"
+            name="language"
             title="What about the data"
-            description="Select a project type to get started"
+            description="Select a language preference"
+            :before-change="validateFields.bind(null, ['language'])"
         >
-            <div>
-                <div class="form-group">
-                    <label for="">Language</label>
-                    <input v-model="formData.language" class="form-control">
+            <div class="w-full">
+                <div class="form-group mt-5">
+                    <multiselect
+                        v-model="formData.language"
+                        v-validate="`required`"
+                        :allow-empty="false"
+                        label="name"
+                        track-by="id"
+                        :options="languages"
+                        :show-labels="false"
+                        name="language"
+                        placeholder="Select a language"
+                    />
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
             </div>
         </form-wizard-tab>
@@ -48,14 +61,23 @@
 
         <!-- timezone Data -->
         <form-wizard-tab
-            name="data3"
+            name="timezone"
             title="What about the data"
-            description="Select a project type to get started"
+            description="Select a Time-Zone"
+            :before-change="validateFields.bind(null, ['timezone'])"
         >
-            <div>
-                <div class="form-group">
-                    <label for="">Timezone</label>
-                    <input v-model="formData.timezone" type="text" class="form-control">
+            <div class="w-full">
+                <div class="form-group mt-5">
+                    <multiselect
+                        v-model="formData.timezone"
+                        v-validate="`required`"
+                        :allow-empty="false"
+                        :options="timezones"
+                        :show-labels="false"
+                        name="timezones"
+                        placeholder="Select a Time-Zone"
+                    />
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
             </div>
         </form-wizard-tab>
@@ -63,14 +85,25 @@
 
         <!-- currency Data -->
         <form-wizard-tab
-            name="data3"
+            name="currency"
             title="What about the data"
-            description="Select a project type to get started"
+            description="Select a currency"
+            :before-change="validateFields.bind(null, ['currency'])"
         >
-            <div>
-                <div class="form-group">
-                    <label for="">Currency</label>
-                    <input v-model="formData.currency" type="text" class="form-control">
+            <div class="w-full">
+                <div class="form-group mt-5">
+                    <multiselect
+                        v-model="formData.currency"
+                        v-validate="`required`"
+                        label="currency"
+                        track-by="id"
+                        :allow-empty="false"
+                        :options="currencies"
+                        :show-labels="false"
+                        name="currency"
+                        placeholder="Select a currency"
+                    />
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
             </div>
         </form-wizard-tab>
@@ -82,6 +115,8 @@
 import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
+import { mapState } from "vuex";
+import { wizardMixins } from "@/utils/mixins";
 
 export default {
     components: {
@@ -89,6 +124,7 @@ export default {
         FormWizardTab,
         GeneralBox
     },
+    mixins: [wizardMixins],
     props: {
         formData: {
             type: Object,
@@ -122,17 +158,33 @@ export default {
             step: 0
         }
     },
+    computed: {
+        ...mapState({
+            languages: state => state.Application.languages,
+            timezones: state => state.Application.timezones,
+            currencies: state => state.Application.currencies
+        })
+    },
+    created() {
+        this.init();
+    },
     methods: {
         next() {
             this.$refs.Wizard.next();
         },
         previous() {
             this.$refs.Wizard.previous();
+        },
+        async init() {
+            await this.$store.dispatch("Application/getLanguages");
+            await this.$store.dispatch("Application/getTimezones");
+            await this.$store.dispatch("Application/getCurrencies");
         }
+
     }
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>

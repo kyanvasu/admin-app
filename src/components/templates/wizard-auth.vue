@@ -12,8 +12,9 @@
             name="description"
             title="Now some serious stuff"
             description="Select a project type to get started"
+            :before-change="validateFields.bind(null, ['authManager'])"
         >
-            <div>
+            <div class="">
                 <general-box
                     v-for="auth in authManagers"
                     :key="auth"
@@ -27,6 +28,7 @@
                     :selected="formData.authManager == auth"
                     @click="formData.authManager=auth"
                 />
+                <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
             </div>
         </form-wizard-tab>
         <!-- End of general information -->
@@ -36,6 +38,7 @@
             name="description"
             title="Now some serious stuff"
             description="Select a project type to get started"
+            :before-change="validateFields.bind(null, ['authUsersMethod'])"
         >
             <div>
                 <general-box
@@ -51,6 +54,7 @@
                     :selected="formData.authUsersMethod == userAuth"
                     @click="formData.authUsersMethod=userAuth"
                 />
+                <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
             </div>
         </form-wizard-tab>
         <!-- End of Colors and photo -->
@@ -61,6 +65,7 @@
 import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
+import { wizardMixins } from "@/utils/mixins";
 
 export default {
     components: {
@@ -68,6 +73,7 @@ export default {
         FormWizardTab,
         GeneralBox
     },
+    mixins: [wizardMixins],
     props: {
         formData: {
             type: Object,
@@ -98,7 +104,8 @@ export default {
             {
                 name: "auth2"
             }],
-            step: 0
+            step: 0,
+            isInvalid: false
         }
     },
     methods: {

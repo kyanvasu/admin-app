@@ -14,7 +14,7 @@ export const vueRouterMixins = {
         const formFields = pickBy(this.vvFields, field => field.changed);
 
         if (!isEmpty(formFields)) {
-            this.$modal.show(() => import(/* webpackChunkName: "components-modals-unsaved-changes" */ "@/components/modals/unsaved-changes"), {
+            this.$modal.show(() => import(/* webpackChunkName: "components-modals-unsaved-changes" */ "@c/organisms/modals/unsaved-changes"), {
                 buttons: [{
                     title: "Discard",
                     handler: () => {
@@ -98,6 +98,29 @@ export const listMixins = {
     methods: {
         initialize() {
             this.$refs.Vuetable.refresh();
+        }
+    }
+}
+
+export const wizardMixins = {
+    data() {
+        return {
+            isInvalid: false
+        }
+    },
+    methods: {
+        validateFields(fieldNames) {
+            const fieldValues = Object.entries(this.formData)
+                .filter(([fieldName]) => fieldNames.includes(fieldName))
+                .map(([_, value]) => value);
+
+            const hasInvalidFields = fieldValues.some(value => {
+                return !value;
+            })
+
+            this.isInvalid = hasInvalidFields;
+            this.$parent.isInvalid = hasInvalidFields;
+            return !hasInvalidFields;
         }
     }
 }
