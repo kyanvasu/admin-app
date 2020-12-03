@@ -73,7 +73,10 @@ export default {
             if (this.localValue < this.steps.length - 1) {
                 this.setActiveTab(this.localValue + 1);
             } else {
-                this.$emit("finished", this.localValue)
+                const isInvalid = this.dispatchBeforeChange(this.localValue);
+                if (!isInvalid) {
+                    this.$emit("finished", this.localValue)
+                }
             }
         },
         previous() {
@@ -94,7 +97,7 @@ export default {
 
 
             if (oldIndex >= 0 && this.tabs[oldIndex]) {
-                if (this.tabs[oldIndex].beforeChange && !this.tabs[oldIndex].beforeChange()) {
+                if (oldIndex <= currentIndex && this.dispatchBeforeChange(oldIndex)) {
                     return
                 }
                 this.tabs[oldIndex].changeActive(false)
@@ -106,6 +109,10 @@ export default {
             if (this.tabs[currentIndex].afterChange) {
                 this.tabs[currentIndex].afterChange()
             }
+        },
+
+        dispatchBeforeChange(index) {
+            return this.tabs[index].beforeChange && !this.tabs[index].beforeChange()
         }
     }
 }

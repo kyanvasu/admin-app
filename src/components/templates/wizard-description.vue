@@ -9,9 +9,10 @@
     >
         <!-- General Information -->
         <form-wizard-tab
-            name="description"
+            name="general"
             title="Let's talk about your project"
             description="General information"
+            :before-change="validateFields.bind(null, ['name'])"
         >
             <div class="kanvas-form w-75">
                 <div class="form-group">
@@ -22,6 +23,7 @@
                         class="form-control"
                         placeholder="Company or Project Name"
                     >
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
                 <div class="form-group">
                     <label for="">How'd you describe your project</label>
@@ -40,9 +42,10 @@
 
         <!-- Branding and colors -->
         <form-wizard-tab
-            name="description"
+            name="colors"
             title="Let's talk about your project"
             description="Branding and colors"
+            :before-change="validateFields.bind(null, ['mainColor', 'secondaryColor'])"
         >
             <div class="kanvas-form w-100">
                 <div class="add-image__container">
@@ -58,10 +61,12 @@
                 <div class="form-group">
                     <!-- <label for="">Main Color</label> -->
                     <color-picker v-model="formData.mainColor" placeholder="Main Color" />
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
                 <div class="form-group">
                     <!-- <label for="">Secondary Color</label> -->
-                    <color-picker v-model="formData.secundaryColor" placeholder="Secondary Color" />
+                    <color-picker v-model="formData.secondaryColor" placeholder="Secondary Color" />
+                    <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
             </div>
         </form-wizard-tab>
@@ -88,6 +93,7 @@ import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import ColorPicker from "@c/molecules/color-picker.vue";
 import ProfileUploader from "@c/molecules/profile-uploader";
+import { wizardMixins } from "@/utils/mixins";
 
 export default {
     components: {
@@ -96,6 +102,7 @@ export default {
         ColorPicker,
         ProfileUploader
     },
+    mixins: [wizardMixins],
     props: {
         formData: {
             type: Object,

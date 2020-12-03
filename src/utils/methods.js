@@ -17,3 +17,15 @@ export default {
         return Math.random().toString(16).replace(".", "");
     }
 }
+export const validateFields = (fieldNames) => {
+    const fieldValues = Object.entries(this.formData)
+        .filter(([fieldName]) => fieldNames.includes(fieldName))
+        .map(([_, value]) => value);
+
+    const hasInvalidFields = fieldValues.some(value => {
+        return !value;
+    })
+
+    this.isInvalid = hasInvalidFields;
+    return !hasInvalidFields;
+}
