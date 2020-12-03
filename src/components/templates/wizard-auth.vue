@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import FormWizard from "@c/molecules/wizard.vue";
+import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
 

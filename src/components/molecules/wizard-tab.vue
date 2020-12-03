@@ -6,7 +6,10 @@
         <p v-if="description" class="wizard-tab__description">
             {{ description }}
         </p>
-        <slot />
+
+        <div class="wizard-tab__display">
+            <slot />
+        </div>
     </div>
 </template>
 
@@ -60,6 +63,12 @@ export default {
             color: #707070;
             font-size: 16px;
             font-weight: 600;
+        }
+
+        &__display {
+            width: 80%;
+            display: flex;
+            justify-content: center;
         }
     }
 

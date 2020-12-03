@@ -27,17 +27,17 @@
                 >
                     <div>
                         <general-box
-                            v-for="projectType in projectTypes"
-                            :key="projectType"
+                            v-for="project in projectTypes"
+                            :key="project.name"
                             :clickable="true"
-                            :title="projectType"
+                            :title="project.label"
                             class="project-types"
-                            icon-class="fa fa-pc"
+                            :icon-class="project.iconClass"
                             theme-color="#8582D1"
                             title-color="#707070"
                             :show-action="false"
-                            :class="{selected: formData.selectedProject == projectType}"
-                            @click="formData.selectedProject=projectType"
+                            :class="{selected: formData.selectedProject == project.name}"
+                            @click="formData.selectedProject=project.name"
                         />
                     </div>
                 </form-wizard-tab>
@@ -52,16 +52,16 @@
                     <div>
                         <general-box
                             v-for="setup in developmentSetups"
-                            :key="setup"
+                            :key="setup.name"
                             :clickable="true"
-                            :title="setup"
+                            :title="setup.label"
                             class="project-types"
-                            icon-class="fa fa-pc"
+                            :icon-class="setup.iconClass"
                             theme-color="#8582D1"
                             title-color="#707070"
                             :show-action="false"
-                            :class="{selected: formData.developmentSetup == setup}"
-                            @click="formData.developmentSetup=setup"
+                            :class="{selected: formData.developmentSetup == setup.name}"
+                            @click="formData.developmentSetup=setup.name"
                         />
                     </div>
                 </form-wizard-tab>
@@ -143,7 +143,7 @@
 
 <script>
 import CardAction from "@c/molecules/card-action.vue";
-import FormWizard from "@c/molecules/wizard.vue";
+import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
 import DescriptionWizard from "@c/templates/wizard-description.vue";
@@ -198,8 +198,35 @@ export default {
                 authUsersMethod: ""
 
             },
-            projectTypes: ["web", "mobile", "both"],
-            developmentSetups: ["php", "js"],
+            projectTypes: [
+                {
+                    name: "web",
+                    iconClass: "fas fa-desktop",
+                    label: "Web"
+                },
+                {
+                    name:"mobile",
+                    iconClass: "fas fa-mobile",
+                    label: "Mobile"
+                },
+                {
+                    name: "both",
+                    iconClass: "",
+                    label: "Both"
+                }
+            ],
+            developmentSetups: [
+                {
+                    name: "php",
+                    iconClass: "fab fa-php",
+                    label: "PHP"
+                },
+                {
+                    name:"js",
+                    iconClass: "fab fa-js-square",
+                    label: "JavaScript"
+                }
+            ],
             filesystems: ["local", "s3"],
             authManagers: ["Public", "Payment", "Kanvas Auth"],
             authUsersMethods: ["Public", "Kanvas Auth", "Payment"]
@@ -278,6 +305,9 @@ export default {
 
 .project-types {
     margin-bottom: 20px;
+    min-width: 274px;
+    background: #F7F7F7;
+    height: 100px;
 }
 
 .app-wizard {
