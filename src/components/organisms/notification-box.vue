@@ -9,7 +9,9 @@
             :border-color="borderColor"
             :icon-color="iconColor"
             :action-color="actionColor"
+            :actions="actions"
             @action="$emit('action')"
+            @action-item-pressed="$emit('action-item-pressed', $event)"
         />
     </div>
 </template>
@@ -57,6 +59,9 @@ export default {
         actionColor: {
             type: String,
             default: "#aaaaaa"
+        },
+        actions: {
+            type: Array
         }
     }
 

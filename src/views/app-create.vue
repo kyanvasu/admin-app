@@ -40,8 +40,8 @@
                             theme-color="#8582D1"
                             title-color="#707070"
                             :show-action="false"
-                            :class="{selected: formData.selectedProject == project.name}"
-                            @click="formData.selectedProject=project.name"
+                            :class="{selected: formData.settings.project_type == project.name}"
+                            @click="formData.settings.project_type=project.name"
                         />
                         <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
                     </div>
@@ -65,8 +65,8 @@
                             theme-color="#8582D1"
                             title-color="#707070"
                             :show-action="false"
-                            :class="{selected: formData.developmentSetup == setup.name}"
-                            @click="formData.developmentSetup=setup.name"
+                            :class="{selected: formData.settings.development_type == setup.name}"
+                            @click="formData.settings.development_type=setup.name"
                         />
                         <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
                     </div>
@@ -97,19 +97,30 @@
                     />
                 </form-wizard-tab>
 
-                <!-- Auth Tab -->
+                <!-- General Information -->
                 <form-wizard-tab
-                    name="auth"
+                    name="description"
+                    title="Now some serious stuff"
+                    description="Select a project type to get started"
                 >
-                    <auth-wizard
-                        ref="AuthWizard"
-                        :auth-managers="authManagers"
-                        :auth-users="authUsersMethods"
-                        :form-data="formData"
-                        @finished="$refs.Wizard.next()"
-                        @reset="$refs.Wizard.previous()"
-                    />
+                    <div class="">
+                        <general-box
+                            v-for="auth in authManagers"
+                            :key="auth.field"
+                            :clickable="true"
+                            :title="auth.label"
+                            class="project-types mb-4"
+                            icon-class="fa fa-pc"
+                            theme-color="#8582D1"
+                            title-color="#707070"
+                            :show-action="false"
+                            :selected="formData[auth.field]"
+                            @click="formData[auth.field]=!formData[auth.field]"
+                        />
+                        <small v-if="isInvalid" class="text-danger text-center w-full d-block"> This field is required </small>
+                    </div>
                 </form-wizard-tab>
+                <!-- End of general information -->
             </form-wizard>
             <!--  end of creation wizard -->
 
@@ -128,7 +139,7 @@
 
         <!-- Controls -->
         <div v-if="isCreating" class="buttons-container">
-            <button class="btn btn-primary mr-3" v-if="[2,3,4].includes(step)" @click="previousNested()">
+            <button v-if="[2,3].includes(step)" class="btn btn-primary mr-3" @click="previousNested()">
                 Back
             </button>
 
@@ -140,11 +151,11 @@
                 Back
             </button>
 
-            <button class="btn btn-primary" v-if="[2,3,4].includes(step)" @click="nextNested()">
+            <button v-if="[2,3].includes(step)" class="btn btn-primary" @click="nextNested()">
                 {{ continueButtonText }}
             </button>
 
-            <button class="btn btn-primary" v-else @click="$refs.Wizard.next()">
+            <button v-else class="btn btn-primary" @click="$refs.Wizard.next()">
                 {{ continueButtonText }}
             </button>
         </div>
@@ -158,7 +169,6 @@ import FormWizard from "@c/organisms/wizard.vue";
 import FormWizardTab from "@c/molecules/wizard-tab.vue";
 import GeneralBox from "@c/molecules/general-box";
 import DescriptionWizard from "@c/templates/wizard-description.vue";
-import AuthWizard from "@c/templates/wizard-auth.vue";
 import DataManagementWizard from "@c/templates/wizard-data-management.vue";
 import { wizardMixins } from "@/utils/mixins";
 
@@ -169,7 +179,6 @@ export default {
         FormWizardTab,
         GeneralBox,
         DescriptionWizard,
-        AuthWizard,
         DataManagementWizard
     },
     mixins: [wizardMixins],
@@ -204,19 +213,23 @@ export default {
             }],
             step: 0,
             formData: {
-                selectedProject: "",
-                developmentSetup: "",
                 name: "",
                 description:"",
-                mainColor: "",
-                secondaryColor:"",
-                filesystem: "",
-                language: "",
-                timezone: "",
-                currency: "",
-                authManager: "",
-                authUsersMethod: ""
-
+                payments_active: false,
+                ecosystem_auth : false,
+                is_public : false,
+                default_apps_plan: 1,
+                settings: {
+                    project_type: "",
+                    development_type: "",
+                    logo: "",
+                    main_color: "",
+                    secondary_color:"",
+                    filesystem: "",
+                    language: "",
+                    timezone: "",
+                    currency: ""
+                }
             },
             projectTypes: [
                 {
@@ -248,8 +261,19 @@ export default {
                 }
             ],
             filesystems: ["local", "s3"],
-            authManagers: ["Public", "Payment", "Kanvas Auth"],
-            authUsersMethods: ["Public", "Kanvas Auth", "Payment"]
+            authManagers: [{
+                label: "Public",
+                field: "is_public"
+            },
+            {
+                label: "Payment",
+                field: "payments_active"
+            },
+            {
+                label: "Kanvas Auth",
+                field: "ecosystem_auth"
+
+            }]
         }
     },
     computed: {
@@ -259,8 +283,7 @@ export default {
         refName() {
             const refsNames = {
                 2: "DescriptionWizard",
-                3: "DataManagementWizard",
-                4: "AuthWizard"
+                3: "DataManagementWizard"
             }
 
             return refsNames[this.step];
@@ -271,8 +294,23 @@ export default {
             this.isCreating = !this.isCreating;
         },
         sendData() {
-            this.isSaved = true;
-            this.isCreating = false;
+            this.isLoading = true;
+            const formData = { ...this.formData }
+            delete formData.files;
+            formData.settings.currency = formData.settings.currency ? formData.settings.currency.currency : ""
+            formData.settings.language = formData.settings.language ? formData.settings.language.id : ""
+            formData.settings = JSON.stringify(formData.settings);
+
+            axios({
+                url: "/apps",
+                method: "POST",
+                data: formData
+            }).then(() => {
+                this.isSaved = true;
+                this.isCreating = false;
+            }).finally(() => {
+                this.isLoading = false;
+            })
         },
 
         nextNested() {
@@ -284,7 +322,9 @@ export default {
         },
 
         goToDashboard() {
-
+            this.$router.push({
+                name: "apps"
+            })
         }
     }
 }

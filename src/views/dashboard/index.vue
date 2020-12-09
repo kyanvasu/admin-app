@@ -17,7 +17,18 @@
                     border-color="#FD8484"
                     action-color="#FD8484"
                     icon-class="fas fa-ban"
-                    @action="openNotificationModal"
+                    :actions="{
+                        managePayments: {
+                            label: 'Manage Payments'
+                        },
+                        remindLater: {
+                            label: 'Remind Me Later'
+                        },
+                        deleteNotification: {
+                            label: 'Delete notification',
+                            class: 'text-danger'
+                        }
+                    }"
                 />
                 <notification-modal
                     :icon-class="iconClass"
@@ -29,7 +40,15 @@
                     description="WeTransfer is correctly configured"
                     theme-color="#8582D1"
                     icon-class="far fa-check-circle"
-                    action=""
+                    :actions="{
+                        settings: {
+                            label: 'App Settings'
+                        },
+                        deleteNotification: {
+                            label: 'Delete notification',
+                            class: 'text-danger'
+                        }
+                    }"
                 />
             </div>
         </div>
@@ -41,7 +60,10 @@
                 title="Users"
             />
             <div class="col-md-12">
-                <statistics-box :statistics="statistics" />
+                <statistics-box
+                    :statistics="statistics"
+                    :dates.sync="statistics.dates"
+                />
             </div>
         </div>
 
@@ -54,13 +76,15 @@
             <div class="col-md-6">
                 <line-graph
                     title="Active Users"
-                    :chart-data="chartData"
+                    :dates.sync="chartData2.dates"
+                    :chart-data="filteredChartData2"
                 />
             </div>
             <div class="col-md-6">
                 <line-graph
                     title="Inactive Users"
-                    :chart-data="chartData"
+                    :dates.sync="chartData.dates"
+                    :chart-data="filteredChartData"
                 />
             </div>
         </div>
@@ -125,6 +149,7 @@ import StorageStat from "@c/organisms/storage-stat";
 import LineGraph from "@c/organisms/line-graph";
 import NotificationModal from "@c/organisms/notification-modal";
 import SectionTitle from "@c/molecules/section-title";
+import moment from "moment"
 
 export default {
     name: "Home",
@@ -141,29 +166,88 @@ export default {
         return {
             chartData: {
                 columns: ["date", "amount"],
+                dates: {
+                    start: "",
+                    end: ""
+                },
                 rows: [
                     {
                         "date": "July",
+                        "completeDate": "2020-07",
                         "amount": 1000
                     },
                     {
                         "date": "Aug",
+                        "completeDate": "2020-08",
                         "amount": 9000
                     },
                     {
+                        "date": "Sep",
+                        "completeDate": "2020-09",
+                        "amount": 1200
+                    },
+                    {
                         "date": "Oct",
+                        "completeDate": "2020-10",
                         "amount": 1200
                     },
                     {
                         "date": "Nov",
+                        "completeDate": "2020-11",
                         "amount": 5000
                     },
                     {
                         "date": "Dec",
+                        "completeDate": "2020-12",
                         "amount": 1000
                     },
                     {
                         "date": "Jan",
+                        "completeDate": "2021-01",
+                        "amount": 10000
+                    }
+                ]
+            },
+            chartData2: {
+                columns: ["date", "amount"],
+                dates: {
+                    start: "",
+                    end: ""
+                },
+                rows: [
+                    {
+                        "date": "July",
+                        "completeDate": "2020-07",
+                        "amount": 1000
+                    },
+                    {
+                        "date": "Aug",
+                        "completeDate": "2020-08",
+                        "amount": 9000
+                    },
+                    {
+                        "date": "Sep",
+                        "completeDate": "2020-09",
+                        "amount": 1200
+                    },
+                    {
+                        "date": "Oct",
+                        "completeDate": "2020-10",
+                        "amount": 1200
+                    },
+                    {
+                        "date": "Nov",
+                        "completeDate": "2020-11",
+                        "amount": 5000
+                    },
+                    {
+                        "date": "Dec",
+                        "completeDate": "2020-12",
+                        "amount": 1000
+                    },
+                    {
+                        "date": "Jan",
+                        "completeDate": "2021-01",
                         "amount": 10000
                     }
                 ]
@@ -246,6 +330,30 @@ export default {
             ]
         }
     },
+    computed: {
+        filteredChartData() {
+            return {
+                columns: this.chartData.columns,
+                rows: this.chartData.rows.filter((stat) => {
+                    if (!this.chartData.dates.start) {
+                        return true
+                    }
+                    return stat.completeDate > moment(this.chartData.dates.start).format("YYYY-MM") && stat.completeDate < moment(this.chartData.dates.end).format("YYYY-MM")
+                })
+            }
+        },
+        filteredChartData2() {
+            return {
+                columns: this.chartData2.columns,
+                rows: this.chartData2.rows.filter((stat) => {
+                    if (!this.chartData2.dates.start) {
+                        return true
+                    }
+                    return stat.completeDate > moment(this.chartData2.dates.start).format("YYYY-MM") && stat.completeDate < moment(this.chartData2.dates.end).format("YYYY-MM")
+                })
+            }
+        }
+    },
     mounted() {
         this.getLeadsStats();
     },
@@ -271,6 +379,9 @@ export default {
                     }
                 }]
             });
+        },
+        toISOMonth() {
+
         }
     }
 };

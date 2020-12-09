@@ -53,19 +53,19 @@
                         class=" mr-5"
                         action="/filesystem"
                         :drag="true"
-                        :image-url="imageUrl"
+                        :image-url="formData.settings.logo"
                         @loaded="updateProfile"
                     />
                 </div>
 
                 <div class="form-group">
                     <!-- <label for="">Main Color</label> -->
-                    <color-picker v-model="formData.mainColor" placeholder="Main Color" />
+                    <color-picker v-model="formData.settings.main_color" placeholder="Main Color" />
                     <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
                 <div class="form-group">
                     <!-- <label for="">Secondary Color</label> -->
-                    <color-picker v-model="formData.secondaryColor" placeholder="Secondary Color" />
+                    <color-picker v-model="formData.settings.secondary_color" placeholder="Secondary Color" />
                     <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
             </div>
@@ -136,7 +136,7 @@ export default {
             this.$refs.Wizard.previous();
         },
         updateProfile(profile) {
-            this.imageUrl = profile[0].url;
+            this.formData.settings.logo = profile[0].url;
             this.formData.files = profile;
         }
     }

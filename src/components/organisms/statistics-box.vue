@@ -2,11 +2,10 @@
     <div class="statistics-box kanvas-scroller">
         <div class="statistics-box__header">
             <div class="statistics-box__date">
-                July, 2020
+                {{ selectedMonth }}
             </div>
             <div class="statistics-box__date-selector">
-                Last Month
-                <i class="fas fa-angle-down"></i>
+                <date-range-picker v-model="localDates" :range-mode="true" />
             </div>
         </div>
         <div class="statistics-box__content">
@@ -24,16 +23,58 @@
 
 <script>
 import StatisticItem from "../molecules/statistic-item.vue";
+import DateRangePicker from "../molecules/date-range-picker.vue";
+import moment from "moment";
 
 export default {
     components: {
-        StatisticItem
+        StatisticItem,
+        DateRangePicker
     },
     props: {
         statistics: {
             type: Array,
             default() {
                 return []
+            }
+        },
+        dates: {
+            type: Object,
+            default() {
+                return {
+                    start: "",
+                    end: ""
+                }
+            }
+        }
+    },
+    computed: {
+        selectedMonth() {
+            return moment(this.localDates.end || new Date()).format("MMMM, YYYY")
+        }
+    },
+    watch: {
+        dates: {
+            handler(date) {
+                this.localDates.start = date.start
+                this.localDates.end = date.end
+            },
+            immediate: true,
+            deep: true
+        },
+        localDates: {
+            handler() {
+                this.$emit("update:dates", this.localDates)
+            },
+            immediate: true,
+            deep: true
+        }
+    },
+    data() {
+        return {
+            localDates: {
+                first: "",
+                last: ""
             }
         }
     }

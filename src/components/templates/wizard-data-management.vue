@@ -25,8 +25,8 @@
                     theme-color="#8582D1"
                     title-color="#707070"
                     :show-action="false"
-                    :selected="formData.filesystem == filesystem"
-                    @click="formData.filesystem=filesystem"
+                    :selected="formData.settings.filesystem == filesystem"
+                    @click="formData.settings.filesystem=filesystem"
                 />
                 <small v-if="isInvalid" class="text-danger"> This field is required </small>
             </div>
@@ -43,7 +43,7 @@
             <div class="w-full">
                 <div class="form-group mt-5">
                     <multiselect
-                        v-model="formData.language"
+                        v-model="formData.settings.language"
                         v-validate="`required`"
                         :allow-empty="false"
                         label="name"
@@ -69,7 +69,7 @@
             <div class="w-full">
                 <div class="form-group mt-5">
                     <multiselect
-                        v-model="formData.timezone"
+                        v-model="formData.settings.timezone"
                         v-validate="`required`"
                         :allow-empty="false"
                         :options="timezones"
@@ -93,7 +93,7 @@
             <div class="w-full">
                 <div class="form-group mt-5">
                     <multiselect
-                        v-model="formData.currency"
+                        v-model="formData.settings.currency"
                         v-validate="`required`"
                         label="currency"
                         track-by="id"

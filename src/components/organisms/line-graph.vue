@@ -18,16 +18,33 @@
                     :colors="chartColors"
                 />
             </article>
+            <footer class="stat-card__footer">
+                <date-range-picker v-model="localDates" :range-mode="true" />
+            </footer>
         </div>
     </div>
 </template>
 
 <script>
+import DateRangePicker from "../molecules/date-range-picker.vue";
+
 export default {
+    components: {
+        DateRangePicker
+    },
     props: {
         chartData: {
             type: Object,
             required: true
+        },
+        dates: {
+            type: Object,
+            default() {
+                return {
+                    start: "",
+                    end: ""
+                }
+            }
         },
         title: {
             type: String,
@@ -41,9 +58,30 @@ export default {
                     smooth: false
                 }
             },
+            localDates: {
+                start: "",
+                end: ""
+            },
             initOptions: { },
             chartColors: ["#8582D1"]
         };
+    },
+    watch: {
+        dates: {
+            handler(date) {
+                this.localDates.start = date.start
+                this.localDates.end = date.end
+            },
+            immediate: true,
+            deep: true
+        },
+        localDates: {
+            handler() {
+                this.$emit("update:dates", this.localDates)
+            },
+            immediate: true,
+            deep: true
+        }
     }
 };
 </script>
@@ -63,6 +101,12 @@ export default {
             font-size: 1rem;
             color: #8582d1;
             margin-bottom: 34px;
+        }
+
+        &__footer {
+            display: flex;
+            justify-content: flex-end;
+            color: #8582d1;
         }
     }
 }

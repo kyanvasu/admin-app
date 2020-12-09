@@ -21,8 +21,38 @@
             </div>
         </div>
 
-        <div v-if="showAction" class="shadow-card__right" @click.stop="$emit('action')">
-            <div class="general-box__action">
+        <div v-if="showAction" class="shadow-card__right" @click.prevent="$emit('action')">
+            <el-popover
+                v-if="actions"
+                v-model="show"
+                :popper-options="{ boundariesElement: '.shadow-card', gpuAcceleration: false }"
+                placement="bottom-end"
+                width="250"
+                popper-class="general-box__popover"
+            >
+                <div class="dropdown">
+                    <ul class="list-group list-group-flush dropdown__body">
+                        <button
+                            v-for="(action, index) in actions"
+                            :key="`single-shortcut-${index}`"
+                            class="list-group-item dropdown-item"
+                            :class="action.class"
+                            @click="$emit('command', index)"
+                        >
+                            {{ action.label }}
+                        </button>
+                    </ul>
+                </div>
+
+
+                <div slot="reference" class="general-box__action">
+                    <slot name="action">
+                        <i class="fas fa-ellipsis-v" />
+                    </slot>
+                </div>
+            </el-popover>
+
+            <div v-else class="general-box__action">
                 <slot name="action">
                     <i class="fas fa-ellipsis-v" />
                 </slot>
@@ -81,6 +111,9 @@ export default {
         showAction: {
             type: Boolean,
             default: true
+        },
+        actions: {
+            type: Array
         }
     },
     mounted() {
@@ -146,6 +179,12 @@ export default {
     &__action {
         color: var(--action-color);
         cursor: pointer;
+    }
+
+    &__popover {
+        padding: 0 0 0 0;
+        overflow: hidden;
+        top: 180px !important;
     }
 }
 </style>
