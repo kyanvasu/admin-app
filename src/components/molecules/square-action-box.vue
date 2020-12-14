@@ -78,9 +78,10 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 222px;
+    min-width: 160px;
+    height: 160px;
     border-radius: 8px;
-    padding: 1.9rem 2rem;
+    padding: 1.9rem 1.5rem;
     background: var(--background-color);
     justify-content: space-between;
     box-shadow: 4px 4px 4px #9090904A;
@@ -94,6 +95,7 @@ export default {
     &__title {
         color: var(--title-color);
         font-weight: bold;
+        font-size: 14px;
     }
 }
 </style>

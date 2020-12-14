@@ -270,4 +270,9 @@ export default {
 html {
     height: 100%;
 }
+
+.app-header {
+    background: #F6F7F9 !important;
+    border-bottom: none !important;
+}
 </style>

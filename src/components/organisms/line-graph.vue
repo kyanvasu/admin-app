@@ -1,14 +1,6 @@
 <template>
     <div class="line-graph">
-        <h4 class="line-graph__title">
-            {{ title }}
-        </h4>
-        <div class="card stat-card">
-            <header class="stat-card__header d-flex justify-content-end">
-                <h5 class="stat-card__action">
-                    See More
-                </h5>
-            </header>
+        <div class="stat-card">
             <article class="stat-card__content w-100 text-center">
                 <ve-line
                     :data="chartData"
@@ -18,6 +10,7 @@
                     :colors="chartColors"
                 />
             </article>
+
             <footer class="stat-card__footer">
                 <date-range-picker v-model="localDates" :range-mode="true" />
             </footer>
@@ -27,6 +20,7 @@
 
 <script>
 import DateRangePicker from "../molecules/date-range-picker.vue";
+import uuid from "uuid/v4"
 
 export default {
     components: {
@@ -63,7 +57,8 @@ export default {
                 end: ""
             },
             initOptions: { },
-            chartColors: ["#8582D1"]
+            chartColors: ["#8582D1"],
+            modalId: uuid()
         };
     },
     watch: {
@@ -82,6 +77,11 @@ export default {
             immediate: true,
             deep: true
         }
+    },
+    methods: {
+        openModal() {
+            this.$modal.show(`${this.modalId}-graph-modal`);
+        }
     }
 };
 </script>
@@ -91,17 +91,10 @@ export default {
     &__title {
         font-size: 21px;
         color: #8582d1;
-        margin-bottom: 10px;
     }
 
     .stat-card {
-        padding: 22px 28px;
         border-radius: 8px;
-        &__action {
-            font-size: 1rem;
-            color: #8582d1;
-            margin-bottom: 34px;
-        }
 
         &__footer {
             display: flex;

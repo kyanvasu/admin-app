@@ -15,7 +15,7 @@ export default {
             appList: state => state.Application.apps
         }),
         recentApps() {
-            return this.appList.slice(0, 2);
+            return this.appList.slice(0, 3);
         }
     }
 };
