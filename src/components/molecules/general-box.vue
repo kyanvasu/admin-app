@@ -185,6 +185,14 @@ export default {
         padding: 0 0 0 0;
         overflow: hidden;
         top: 180px !important;
+
+        .list-group-item {
+            font-size: 17px;
+            color: #888888;
+            padding: 17px 0px;
+            padding-left: 31px;
+            cursor: pointer;
+        }
     }
 }
 </style>

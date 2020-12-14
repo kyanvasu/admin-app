@@ -1,3 +1,4 @@
+
 <template>
     <div class="card-action">
         <p class="card-action__icon">
@@ -16,7 +17,7 @@
         <button class="btn btn-primary card-action__action" @click="$emit('action')">
             {{ actionButtonText }}
         </button>
-        <div class="card-action__footer" v-if="footerNote">
+        <div v-if="footerNote" class="card-action__footer">
             <span class="footer-title">Note:</span>
             {{ footerNote }}
         </div>
@@ -24,6 +25,8 @@
 </template>
 
 <script>
+/* eslint-disable vue/require-default-prop */
+
 export default {
     props: {
         iconClass: {

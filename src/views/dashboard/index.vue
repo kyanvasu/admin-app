@@ -74,18 +74,27 @@
                 title="Usage"
             />
             <div class="col-md-6">
-                <line-graph
-                    title="Active Users"
-                    :dates.sync="chartData2.dates"
-                    :chart-data="filteredChartData2"
-                />
+                <line-graph-card  title="Active Users">
+                    <template #content>
+                        <line-graph
+                            title="Active Users"
+                            :dates.sync="chartData2.dates"
+                            :chart-data="filteredChartData2"
+                        />
+                    </template>
+                </line-graph-card>
             </div>
+
             <div class="col-md-6">
-                <line-graph
-                    title="Inactive Users"
-                    :dates.sync="chartData.dates"
-                    :chart-data="filteredChartData"
-                />
+                <line-graph-card title="Inactive Users">
+                    <template #content>
+                        <line-graph
+                            title="Inactive Users"
+                            :dates.sync="chartData.dates"
+                            :chart-data="filteredChartData"
+                        />
+                    </template>
+                </line-graph-card>
             </div>
         </div>
 
@@ -147,6 +156,7 @@ import StatisticsBox from "@c/organisms/statistics-box";
 import StatisticLine from "@c/organisms/statistic-line";
 import StorageStat from "@c/organisms/storage-stat";
 import LineGraph from "@c/organisms/line-graph";
+import LineGraphCard from "@c/templates/line-graph-card";
 import NotificationModal from "@c/organisms/notification-modal";
 import SectionTitle from "@c/molecules/section-title";
 import moment from "moment"
@@ -159,6 +169,7 @@ export default {
         StatisticLine,
         StorageStat,
         LineGraph,
+        LineGraphCard,
         SectionTitle,
         NotificationModal
     },

@@ -7,7 +7,18 @@
                     class="col-md-12"
                     title="Recent Apps"
                 />
-                <div class="col-md-4 d-flex justify-content-center mb-4">
+                <div v-for="(app, index) in recentApps" :key="`recent-app-${index}`" class="col-md-3 d-flex justify-content-center mb-4">
+                    <square-action-box
+                        :title="app.name"
+                        :icon-class="app.iconClass || app.icon"
+                    >
+                        <template #icon>
+                            <img :src="app.icon || '/images/zoom.png'" class="small-icon">
+                        </template>
+                    </square-action-box>
+                </div>
+
+                <div class="col-md-3 d-flex justify-content-center mb-4">
                     <square-action-box
                         title="Create new app"
                         icon-class="fa fa-plus"
@@ -21,17 +32,6 @@
                         </template>
                     </square-action-box>
                 </div>
-
-                <div v-for="(app, index) in recentApps" :key="`recent-app-${index}`" class="col-md-4 d-flex justify-content-center mb-4">
-                    <square-action-box
-                        :title="app.name"
-                        :icon-class="app.iconClass || app.icon"
-                    >
-                        <template #icon>
-                            <img :src="app.icon || '/images/zoom.png'" class="small-icon">
-                        </template>
-                    </square-action-box>
-                </div>
             </div>
 
             <!-- All my apps section -->
@@ -40,7 +40,7 @@
                     class="col-md-12"
                     title="All my apps"
                 />
-                <div v-for="(app, index) in apps" :key="`app-${index}`" class="col-md-4 d-flex justify-content-center mb-4">
+                <div v-for="(app, index) in apps" :key="`app-${index}`" class="col-md-3 d-flex justify-content-center mb-4">
                     <square-action-box
                         :title="app.name"
                         :icon-class="app.iconClass || app.icon"
@@ -135,7 +135,7 @@ export default {
 }
 
 .small-icon {
-    width: 68px;
-    height: 68px;
+    width: 52px;
+    height: 52px;
 }
 </style>
