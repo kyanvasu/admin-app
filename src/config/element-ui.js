@@ -6,7 +6,7 @@ import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 
 // configure language
 locale.use(lang)
-import { DatePicker, Dialog, Popover, Upload, Loading, Table, TableColumn, Pagination } from "element-ui";
+import { DatePicker, Dialog, Popover, Upload, Loading, Table, TableColumn, Pagination, Switch } from "element-ui";
 
 Vue.use(DatePicker)
 Vue.use(Popover)
@@ -16,6 +16,7 @@ Vue.use(Pagination)
 Vue.use(TableColumn)
 Vue.use(Dialog)
 Vue.use(Upload)
+Vue.use(Switch)
 Vue.use(Loading)
 Vue.use(CollapseTransition)
 Vue.component(CollapseTransition.name, CollapseTransition)

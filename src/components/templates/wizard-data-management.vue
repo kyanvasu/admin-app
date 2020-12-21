@@ -33,12 +33,12 @@
         </form-wizard-tab>
         <!-- End of filesystem data -->
 
-        <!-- language data -->
+        <!-- Location Data -->
         <form-wizard-tab
-            name="language"
+            name="timezone"
             title="What about the data"
-            description="Select a language preference"
-            :before-change="validateFields.bind(null, ['language'])"
+            description="Select language, time-zone and currency"
+            :before-change="validateFields.bind(null, ['language', 'timezone', 'currency'], formData.settings)"
         >
             <div class="w-full">
                 <div class="form-group mt-5">
@@ -55,18 +55,7 @@
                     />
                     <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
-            </div>
-        </form-wizard-tab>
-        <!-- End of language -->
 
-        <!-- timezone Data -->
-        <form-wizard-tab
-            name="timezone"
-            title="What about the data"
-            description="Select a Time-Zone"
-            :before-change="validateFields.bind(null, ['timezone'])"
-        >
-            <div class="w-full">
                 <div class="form-group mt-5">
                     <multiselect
                         v-model="formData.settings.timezone"
@@ -79,18 +68,7 @@
                     />
                     <small v-if="isInvalid" class="text-danger"> This field is required </small>
                 </div>
-            </div>
-        </form-wizard-tab>
-        <!-- End of timezone Data -->
 
-        <!-- currency Data -->
-        <form-wizard-tab
-            name="currency"
-            title="What about the data"
-            description="Select a currency"
-            :before-change="validateFields.bind(null, ['currency'])"
-        >
-            <div class="w-full">
                 <div class="form-group mt-5">
                     <multiselect
                         v-model="formData.settings.currency"
@@ -107,7 +85,7 @@
                 </div>
             </div>
         </form-wizard-tab>
-        <!-- End of currency Data -->
+        <!-- End of timezone Data -->
     </form-wizard>
 </template>
 
@@ -147,13 +125,7 @@ export default {
                 name: "filesystem"
             },
             {
-                name: "language"
-            },
-            {
-                name: "timezone"
-            },
-            {
-                name: "currency"
+                name: "data"
             }],
             step: 0
         }

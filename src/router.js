@@ -135,6 +135,14 @@ const router = new Router({
                 )
         },
         {
+            path: "/apps/settings",
+            name: "apps-settings",
+            component: () =>
+                import(
+                    /* webpackChunkName: "apps-settings" */ "./views/settings"
+                )
+        },
+        {
             path: "/auth/facebook",
             name: "facebook-auth",
             component: () =>
