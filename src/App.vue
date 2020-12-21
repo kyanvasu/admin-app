@@ -29,6 +29,7 @@
                 :show-sidebar="showSidebar"
                 :sidebar-state="sidebarState"
                 :user-data="userData"
+                :app-data="appData"
                 @handle-sidebar="handleSidebar(!showSidebar)"
                 @toggle-notifications="toggleNotifications"
                 @selected-company="switchCompany"
@@ -54,7 +55,8 @@
 </template>
 
 <script>
-const { AppHeader, AppSidebar } = require(`./import.${process.env.VUE_APP_IMPORTS}`);
+const { AppSidebar } = require(`./import.${process.env.VUE_APP_IMPORTS}`);
+import AppHeader from "@c/organisms/header/gw-header";
 import { hexToHSL } from "@/utils/helpers";
 import { mapActions, mapGetters, mapState } from "vuex";
 import AfterSignupWizard from "@/components/organisms/modals/after-signup-wizard";
@@ -88,6 +90,7 @@ export default {
         ...mapState({
             appsList: state => state.Application.apps,
             appSettings: state => state.Application.settings,
+            appData: state => state.Application.data,
             companyData: state => state.Company.data,
             companiesList: state => state.Company.list,
             notificationsCount: state => state.Notifications.notifications.total_notifications || 0,

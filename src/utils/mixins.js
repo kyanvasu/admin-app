@@ -109,8 +109,9 @@ export const wizardMixins = {
         }
     },
     methods: {
-        validateFields(fieldNames) {
-            const fieldValues = Object.entries(this.formData)
+        validateFields(fieldNames, formDataSource) {
+            const formData = formDataSource || this.formData;
+            const fieldValues = Object.entries(formData)
                 .filter(([fieldName]) => fieldNames.includes(fieldName))
                 .map(([_, value]) => value);
 

@@ -6,9 +6,10 @@
         @click="$emit('click')"
     >
         <div class="shadow-card__left">
-            <div v-if="iconClass" class="general-box__icon">
+            <div v-if="iconClass||icon" class="general-box__icon">
                 <slot name="icon">
-                    <i :class="iconClass" />
+                    <img v-if="icon" :src="icon" alt="no an icon">
+                    <i v-else :class="iconClass" />
                 </slot>
             </div>
             <div>
@@ -32,7 +33,7 @@
             >
                 <div class="dropdown">
                     <ul class="list-group list-group-flush dropdown__body">
-                        <button
+                        <li
                             v-for="(action, index) in actions"
                             :key="`single-shortcut-${index}`"
                             class="list-group-item dropdown-item"
@@ -40,7 +41,7 @@
                             @click="$emit('command', index)"
                         >
                             {{ action.label }}
-                        </button>
+                        </li>
                     </ul>
                 </div>
 
@@ -75,6 +76,10 @@ export default {
         iconClass: {
             type: String,
             default: "fa fa-close"
+        },
+        icon: {
+            type: String,
+            default: ""
         },
         type: {
             type: String,
