@@ -37,6 +37,7 @@
                             :title="project.label"
                             class="project-types"
                             :icon-class="project.iconClass"
+                            :icon="project.icon"
                             theme-color="#8582D1"
                             title-color="#707070"
                             :show-action="false"
@@ -245,7 +246,8 @@ export default {
                 {
                     name: "both",
                     iconClass: "",
-                    label: "Both"
+                    label: "Both",
+                    icon: "/images/mobile-pc.svg"
                 }
             ],
             developmentSetups: [
@@ -321,7 +323,8 @@ export default {
             this.$refs[this.refName].previous()
         },
 
-        goToDashboard() {
+        async goToDashboard() {
+            await this.$store.dispatch("Application/getApps")
             this.$router.push({
                 name: "apps"
             })
