@@ -146,6 +146,9 @@
                     <div class="col-md-6 mb-3 semibold">
                         <a href="">Manage your products <i class="fas fa-long-arrow-alt-right"></i></a>
                     </div>
+                    <div class="col-md-6 mb-3 semibold">
+                        <router-link :to="{name: 'settings-app'}" >Manage your App <i class="fas fa-long-arrow-alt-right"></i></router-link>
+                    </div>
                 </div>
             </section-title>
         </div>
