@@ -405,9 +405,6 @@ export default {
     created() {
         this.loadInitialData()
     },
-    mounted() {
-        this.getLeadsStats();
-    },
     methods: {
         loadInitialData() {
             this.formData = {
@@ -431,13 +428,6 @@ export default {
                     currency: this.appSettings.settings.currency
                 }
             }
-        },
-
-        getLeadsStats() {
-            axios.get("/leads-stats")
-                .then(response => {
-                    this.stats = response.data;
-                })
         },
         openNotificationModal() {
             this.$modal.show("notification-modal", {

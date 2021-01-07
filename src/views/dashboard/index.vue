@@ -31,7 +31,7 @@
                     }"
                 />
                 <notification-modal
-                    :icon-class="iconClass"
+                    icon-class="fa-check-circle"
                 />
             </div>
             <div class="col-md-4 my-2">
@@ -365,16 +365,7 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getLeadsStats();
-    },
     methods: {
-        getLeadsStats() {
-            axios.get("/leads-stats")
-                .then(response => {
-                    this.stats = response.data;
-                })
-        },
         openNotificationModal() {
             this.$modal.show("notification-modal", {
                 title: "Your Plan is suspended",

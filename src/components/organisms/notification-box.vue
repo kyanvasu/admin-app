@@ -61,7 +61,7 @@ export default {
             default: "#aaaaaa"
         },
         actions: {
-            type: Array
+            type: Object
         }
     }
 
