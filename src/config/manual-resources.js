@@ -16,6 +16,12 @@ export default [
                 "iconClass":"fa fa-cogs"
             },
             {
+                "name":"Theme",
+                "title":"Theme",
+                "route":"/settings/theme",
+                "iconClass":"fa fa-cogs"
+            },
+            {
                 "name":"Checkout Information",
                 "title":"Checkout Information",
                 "route":"/settings",
