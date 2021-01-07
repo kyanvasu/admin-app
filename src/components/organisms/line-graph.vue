@@ -1,5 +1,5 @@
 <template>
-    <div class="line-graph">
+    <div class="line-graph" ref="LineGraph">
         <div class="stat-card">
             <article class="stat-card__content w-100 text-center">
                 <ve-line
@@ -43,6 +43,18 @@ export default {
         title: {
             type: String,
             required: true
+        },
+        mainColor: {
+            type: String,
+            default: "#8582d1"
+        },
+        accentColor: {
+            type: String,
+            default: "#8582d1"
+        },
+        backgroundColor: {
+            type: String,
+            default: "#8582d1"
         }
     },
     data() {
@@ -57,9 +69,13 @@ export default {
                 end: ""
             },
             initOptions: { },
-            chartColors: ["#8582D1"],
             modalId: uuid()
         };
+    },
+    computed: {
+        chartColors() {
+            return [this.mainColor]
+        }
     },
     watch: {
         dates: {
@@ -76,11 +92,26 @@ export default {
             },
             immediate: true,
             deep: true
+        },
+        mainColor() {
+            this.setColors()
+        },
+        backgroundColor() {
+            this.setColors()
         }
+    },
+    mounted() {
+        this.setColors();
     },
     methods: {
         openModal() {
             this.$modal.show(`${this.modalId}-graph-modal`);
+        },
+        setColors() {
+            const documentRoot = this.$refs.LineGraph;
+            documentRoot.style.setProperty("--main-color", this.mainColor);
+            documentRoot.style.setProperty("--accent-color", this.accentColor);
+            documentRoot.style.setProperty("--background-color", this.backgroundColor);
         }
     }
 };
@@ -90,16 +121,17 @@ export default {
 .line-graph {
     &__title {
         font-size: 21px;
-        color: #8582d1;
+        color: var(--main-color);
     }
 
     .stat-card {
         border-radius: 8px;
+        background: var(--background-color);
 
         &__footer {
             display: flex;
             justify-content: flex-end;
-            color: #8582d1;
+            color: var(--main-color);
         }
     }
 }

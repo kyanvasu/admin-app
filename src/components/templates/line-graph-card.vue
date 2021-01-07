@@ -1,5 +1,5 @@
 <template>
-    <div class="line-graph">
+    <div class="line-graph" ref="LineGraphCard">
         <h4 class="line-graph__title">
             {{ title }}
         </h4>
@@ -39,6 +39,14 @@ export default {
         title: {
             type: String,
             required: true
+        },
+        mainColor: {
+            type: String,
+            default: "#8582d1"
+        },
+        backgroundColor: {
+            type: String,
+            default: "#8582d1"
         }
     },
     data() {
@@ -46,9 +54,25 @@ export default {
             modalId: uuid()
         };
     },
+    mounted() {
+        this.setColors()
+    },
+    watch: {
+        mainColor() {
+            this.setColors();
+        },
+        backgroundColor() {
+            this.setColors();
+        }
+    },
     methods: {
         openModal() {
             this.$modal.show(`${this.modalId}-graph-modal`);
+        },
+        setColors() {
+            const documentRoot = this.$refs.LineGraphCard;
+            documentRoot.style.setProperty("--main-color", this.mainColor);
+            documentRoot.style.setProperty("--background-color", this.backgroundColor);
         }
     }
 };
@@ -58,16 +82,18 @@ export default {
 .line-graph {
     &__title {
         font-size: 21px;
-        color: #8582d1;
+        color: var(--main-color);
         margin-bottom: 10px;
     }
 
     .stat-card {
         padding: 22px 28px;
         border-radius: 8px;
+        background: var(--background-color);
+        color: white;
         &__action {
             font-size: 1rem;
-            color: #8582d1;
+            color: var(--main-color);
             margin-bottom: 34px;
             cursor: pointer;
         }
@@ -75,7 +101,7 @@ export default {
         &__footer {
             display: flex;
             justify-content: flex-end;
-            color: #8582d1;
+            color: var(--main-color);
         }
     }
 }
@@ -86,7 +112,7 @@ export default {
     &__title {
         margin-left: 100px;
         font-size: 21px;
-        color: #8582d1;
+         color: var(--main-color);
         margin-bottom: 10px;
     }
 }
