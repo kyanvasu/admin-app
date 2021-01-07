@@ -1,12 +1,10 @@
 <template>
     <div ref="ColorPicker" class="color-picker">
         <input
+            v-model="localValue"
             type="text"
-            readonly
-            :value="localValue"
             :placeholder="placeholder"
             class="color-picker__input form-control"
-            @click="$refs.Picker.click()"
         >
         <input
             id=""

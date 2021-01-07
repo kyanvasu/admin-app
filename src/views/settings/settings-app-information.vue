@@ -9,12 +9,12 @@
                 <div class="section-content my-4 card">
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Project Type
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>You selected a project type to get started</p>
+                            <p class="section-content__label">You selected a project type to get started</p>
                             <div>
                                 <label
                                     v-for="projectType in projectTypes"
@@ -36,14 +36,14 @@
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Development Setup
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p>Select your development setup</p>
+                                    <p class="section-content__label">Select your development setup</p>
                                     <div>
                                         <label
                                             v-for="setup in developmentSetups"
@@ -69,13 +69,17 @@
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Domain and URL
-                            </h5>
+                            </h6>
                         </div>
-                        <div class="col-md-7">
-                            <p>Type your URL here</p>
-                            <input v-model="formData.url" type="text" class="form-control">
+                        <div class="col-md-7 form-group">
+                            <p class="section-content__label">Type your URL here</p>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <input v-model="formData.url" type="text" class="input form-control">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -88,42 +92,44 @@
                 class="col-md-12"
                 title="Brand and Information"
             >
-                <div class="row section-content my-4 card">
+                <div class="section-content my-4 card">
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 App Name
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Your app's name</p>
-                            <div class="form-group">
-                                <input v-model="formData.name" type="text" class="form-control">
+                            <p class="section-content__label">Your app's name</p>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <input v-model="formData.name" type="text" class="input form-control">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Description
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Select Your app's description</p>
+                            <p class="section-content__label">Select Your app's description</p>
                             <div class="form-group">
-                                <textarea v-model="formData.description" type="text" class="form-control" />
+                                <textarea v-model="formData.description" type="text" class="input form-control" />
                             </div>
                         </div>
                     </div>
 
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Branding Colors
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Your app's colors</p>
+                            <p class="section-content__label">Your app's colors</p>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <color-picker v-model="formData.settings.main_color" placeholder="Main Color" />
@@ -138,12 +144,12 @@
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Branding Picture
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Your app's logo</p>
+                            <p class="section-content__label">Your app's logo</p>
                             <div class="add-image__container">
                                 <profile-uploader
                                     class=" mr-5"
@@ -165,15 +171,15 @@
                 class="col-md-12"
                 title="Data"
             >
-                <div class="row section-content my-4 card">
+                <div class="section-content my-4 card">
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Data management
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Select your filesystem management</p>
+                            <p class="section-content__label">Select your filesystem management</p>
                             <div>
                                 <label
                                     v-for="filesystem in filesystems"
@@ -195,82 +201,88 @@
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Time Zone
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Select your timezone</p>
-                            <div>
-                                <multiselect
-                                    v-model="formData.settings.timezone"
-                                    v-validate="`required`"
-                                    :allow-empty="false"
-                                    :options="timezones"
-                                    :show-labels="false"
-                                    name="timezones"
-                                    placeholder="Select a Time-Zone"
-                                />
-                                <small v-if="false" class="text-danger"> This field is required </small>
+                            <p class="section-content__label">Select your timezone</p>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <multiselect
+                                        v-model="formData.settings.timezone"
+                                        v-validate="`required`"
+                                        :allow-empty="false"
+                                        :options="timezones"
+                                        :show-labels="false"
+                                        name="timezones"
+                                        placeholder="Select a Time-Zone"
+                                    />
+                                    <small v-if="false" class="text-danger"> This field is required </small>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Currency
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Select your currency</p>
-                            <div>
-                                <multiselect
-                                    v-model="formData.settings.currency"
-                                    v-validate="`required`"
-                                    label="currency"
-                                    track-by="id"
-                                    :allow-empty="false"
-                                    :options="currencies"
-                                    :show-labels="false"
-                                    name="currency"
-                                    placeholder="Select a currency"
-                                />
-                                <small v-if="false" class="text-danger"> This field is required </small>
+                            <p class="section-content__label">Select your currency</p>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <multiselect
+                                        v-model="formData.settings.currency"
+                                        v-validate="`required`"
+                                        label="currency"
+                                        track-by="id"
+                                        :allow-empty="false"
+                                        :options="currencies"
+                                        :show-labels="false"
+                                        name="currency"
+                                        placeholder="Select a currency"
+                                    />
+                                    <small v-if="false" class="text-danger"> This field is required </small>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Language
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Select your language</p>
-                            <div>
-                                <multiselect
-                                    v-model="formData.settings.language"
-                                    v-validate="`required`"
-                                    :allow-empty="false"
-                                    label="name"
-                                    track-by="id"
-                                    :options="languages"
-                                    :show-labels="false"
-                                    name="language"
-                                    placeholder="Select a language"
-                                />
-                                <small v-if="false" class="text-danger"> This field is required </small>
+                            <p class="section-content__label">Select your language</p>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <multiselect
+                                        v-model="formData.settings.language"
+                                        v-validate="`required`"
+                                        :allow-empty="false"
+                                        label="name"
+                                        track-by="id"
+                                        :options="languages"
+                                        :show-labels="false"
+                                        name="language"
+                                        placeholder="Select a language"
+                                    />
+                                    <small v-if="false" class="text-danger"> This field is required </small>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row lined-item">
                         <div class="col-md-5">
-                            <h5 class="text-primary">
+                            <h6 class="text-primary">
                                 Auth
-                            </h5>
+                            </h6>
                         </div>
                         <div class="col-md-7">
-                            <p>Type your URL here</p>
+                            <p class="section-content__label">Select your development setup</p>
                             <div>
                                 <label
                                     v-for="auth in authManagers"
@@ -295,6 +307,7 @@
                 </div>
             </section-title>
         </div>
+
         <div class="text-right">
             <button class="btn btn-secondary mr-2" @click="loadInitialData()">
                 Discard
@@ -464,6 +477,9 @@ export default {
                 data: formData
             }).finally(async() => {
                 await this.$store.dispatch("Application/getGlobalStateData")
+                // Solution implemented for now until we can properly refresh all
+                // of the user's and company's data through Vuex implementation.
+                window.location.reload();
                 this.isLoading = false;
             })
         }
@@ -476,62 +492,29 @@ export default {
     --text-color: #707070;
     --accent-color: #8582D1;
 
-    .stat-card {
-
-        &_header,
-        &__title,
-        i {
-            color: #777 !important;
-            font-weight: bold;
-        }
-
-        &__content.number {
-            font-weight: bolder;
-            font-size: 30px;
-        }
-
-    }
-
-    .dashboard-title {
-        font-size: 21px;
-        font-weight: 500;
-        color: var(--text-color);
-    }
-
-    .dashboard-subtitle {
-        font-size: 26px;
-        font-weight: 600;
-        color: var(--accent-color);
-    }
-
-    .section {
-        margin-bottom: 2.5rem;
-    }
-    .small-icon {
-        width: 52px;
-        height: 52px;
-    }
-
-    .custom-action {
-        color: #9B9B9B;
-        font-weight: 600;
-    }
-
     .section-content {
         color: #707070;
-        font-size: 21px;
-    }
+        font-size: 16px;
 
-    .bold-title {
-        font-weight: bold;
-    }
+        &__label {
+            font-weight: 500;
+        }
+        .form-group {
+            [type=text].input {
+                border: none;
+                padding-left: 5px;
+                padding-right: 5px;
+                border-radius: 0 0 0 0 !important;
+                border-bottom: 1.5px solid #F7F7F7;
+            }
 
-    a, a:visited {
-        color: #008FE8;
-    }
+            textarea.input {
+                border: none !important;
+                background: #F7F7F7;
+                padding: 15px 10px !important;
+            }
 
-    .semibold {
-        font-weight: 600;
+        }
     }
 
     .lined-item {
