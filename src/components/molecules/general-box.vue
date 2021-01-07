@@ -118,7 +118,7 @@ export default {
             default: true
         },
         actions: {
-            type: Array
+            type: Object
         }
     },
     mounted() {

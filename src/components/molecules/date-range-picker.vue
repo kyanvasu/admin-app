@@ -180,7 +180,6 @@ export default {
         setDate(date, prop = "start", close) {
             this.$set(this.dates, prop, date);
             this.$emit("input", this.dates);
-            console.log(this.dates);
             if (close) {
                 this.show = false;
             }
