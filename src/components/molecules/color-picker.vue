@@ -25,6 +25,10 @@ export default {
         placeholder: {
             type: String,
             default: ""
+        },
+        value: {
+            type: String,
+            required: true
         }
     },
     data() {
@@ -33,20 +37,31 @@ export default {
         }
     },
     watch: {
-        value() {
-            if (this.value != this.localValue) {
-                this.localValue = this.value;
-            }
+        value: {
+            handler() {
+                if (this.value != this.localValue) {
+                    this.localValue = this.value;
+                }
+            },
+            immediate: true
         },
         localValue: {
             handler() {
-                const documentRoot = this.$refs.ColorPicker;
-                documentRoot && documentRoot.style.setProperty("--selected-color", this.localValue);
                 if (this.value != this.localValue) {
+                    this.setColor()
                     this.$emit("input", this.localValue);
                 }
             },
             immediate: true
+        }
+    },
+    mounted() {
+        this.setColor();
+    },
+    methods: {
+        setColor() {
+            const documentRoot = this.$refs.ColorPicker;
+            documentRoot && documentRoot.style.setProperty("--selected-color", this.localValue);
         }
     }
 }
