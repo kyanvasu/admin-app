@@ -30,6 +30,7 @@
                 :sidebar-state="sidebarState"
                 :user-data="userData"
                 :app-data="appData"
+                :hide-company-name="true"
                 @handle-sidebar="handleSidebar(!showSidebar)"
                 @toggle-notifications="toggleNotifications"
                 @selected-company="switchCompany"

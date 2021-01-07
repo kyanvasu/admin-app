@@ -53,10 +53,12 @@ const mutations = {
         };
 
         state.resources = payload.map(resource => {
-            resource.links = resource.links.map(link => {
-                link.slug = links[slug(link.title.toLowerCase())];
-                return link;
-            })
+            if (resource.links) {
+                resource.links = resource.links.map(link => {
+                    link.slug = links[slug(link.title.toLowerCase())];
+                    return link;
+                })
+            }
             return resource;
         });
     },

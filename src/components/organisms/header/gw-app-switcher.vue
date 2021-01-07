@@ -15,13 +15,12 @@
                 <img src="" alt="">
                 <span>{{ app.name }}</span>
             </a>
-            <a
-                @click="$emit('create-app')"
-                target="_blank"
+            <router-link
+                :to="{name: 'apps-create'}"
                 class="create-app-item"
             >
                 <span> Create App</span>
-            </a>
+            </router-link>
         </template>
     </dropdown>
 </template>
@@ -85,6 +84,8 @@ export default {
 
 .create-app-item {
     cursor: pointer;
+    display: inline-block;
+    padding: 15px 0;
 }
 
 @media(max-width: 992px) {
