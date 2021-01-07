@@ -135,11 +135,19 @@ const router = new Router({
                 )
         },
         {
-            path: "/apps/settings",
-            name: "apps-settings",
+            path: "/settings",
+            name: "settings-checkout",
             component: () =>
                 import(
-                    /* webpackChunkName: "apps-settings" */ "./views/settings"
+                    /* webpackChunkName: "settings-checkout" */ "./views/settings/settings-checkout"
+                )
+        },
+        {
+            path: "/settings/app",
+            name: "settings-app",
+            component: () =>
+                import(
+                    /* webpackChunkName: "settings-app" */ "./views/settings/settings-app-information"
                 )
         },
         {
