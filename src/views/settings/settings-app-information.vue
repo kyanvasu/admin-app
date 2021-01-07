@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-7">
                             <p>Type your URL here</p>
-                            <input type="text" class="form-control" v-model="formData.url">
+                            <input v-model="formData.url" type="text" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -283,9 +283,9 @@
                                         :id="auth.field"
                                         type="checkbox"
                                         :checked="formData[auth.field]"
-                                        @click="formData[auth.field]=!formData[auth.field]"
                                         name="project-type"
                                         :value="auth.field"
+                                        @click="formData[auth.field]=!formData[auth.field]"
                                     >
                                     {{ auth.label }}
                                 </label>
@@ -295,10 +295,14 @@
                 </div>
             </section-title>
         </div>
-
-        <button @click="sendData()" :disabled="isLoading">
-            Save Changes
-        </button>
+        <div class="text-right">
+            <button class="btn btn-secondary mr-2" @click="loadInitialData()">
+                Discard
+            </button>
+            <button :disabled="isLoading" class="btn btn-primary" @click="sendData()">
+                Save Changes
+            </button>
+        </div>
     </div>
 </template>
 
@@ -397,33 +401,38 @@ export default {
             currencies: state => state.Application.currencies
         })
     },
+
     created() {
-        this.formData = {
-            name: this.appSettings.name,
-            description: this.appSettings.description,
-            payments_active: Boolean(this.appData.payments_active),
-            ecosystem_auth : Boolean(this.appData.ecosystem_auth),
-            is_public : Boolean(this.appData.is_public),
-            default_apps_plan_id: this.appData.default_apps_plan_id,
-            url: this.appData.url,
-            settings: {
-                project_type: this.appSettings.settings.project_type,
-                development_type: this.appSettings.settings.development_type,
-                logo: this.appSettings.settings.logo,
-                base_color: this.appSettings.settings.base_color,
-                main_color: this.appSettings.settings.base_color || this.appSettings.settings.main_color,
-                secondary_color: this.appSettings.settings.secondary_color,
-                filesystem: this.appSettings.settings.filesystem,
-                language: this.appSettings.settings.language,
-                timezone: this.appSettings.settings.timezone,
-                currency: this.appSettings.settings.currency
-            }
-        }
+        this.loadInitialData()
     },
     mounted() {
         this.getLeadsStats();
     },
     methods: {
+        loadInitialData() {
+            this.formData = {
+                name: this.appSettings.name,
+                description: this.appSettings.description,
+                payments_active: Boolean(this.appData.payments_active),
+                ecosystem_auth : Boolean(this.appData.ecosystem_auth),
+                is_public : Boolean(this.appData.is_public),
+                default_apps_plan_id: this.appData.default_apps_plan_id,
+                url: this.appData.url,
+                settings: {
+                    project_type: this.appSettings.settings.project_type,
+                    development_type: this.appSettings.settings.development_type,
+                    logo: this.appSettings.settings.logo,
+                    base_color: this.appSettings.settings.base_color,
+                    main_color: this.appSettings.settings.base_color || this.appSettings.settings.main_color,
+                    secondary_color: this.appSettings.settings.secondary_color,
+                    filesystem: this.appSettings.settings.filesystem,
+                    language: this.appSettings.settings.language,
+                    timezone: this.appSettings.settings.timezone,
+                    currency: this.appSettings.settings.currency
+                }
+            }
+        },
+
         getLeadsStats() {
             axios.get("/leads-stats")
                 .then(response => {
@@ -455,15 +464,16 @@ export default {
             const formData = { ...this.formData }
             delete formData.files;
             formData.settings.base_color = formData.settings.main_color
-            formData.settings.currency = formData.settings.currency ? formData.settings.currency.currency : ""
-            formData.settings.language = formData.settings.language ? formData.settings.language.id : ""
+            formData.settings.currency = formData.settings.currency ? formData.settings.currency.currency : "USD"
+            formData.settings.language = formData.settings.language ? formData.settings.language.id : "EN"
             formData.settings = JSON.stringify(formData.settings);
 
             axios({
                 url: `/apps/${this.appData.id}`,
                 method: "PUT",
                 data: formData
-            }).finally(() => {
+            }).finally(async() => {
+                await this.$store.dispatch("Application/getGlobalStateData")
                 this.isLoading = false;
             })
         }
