@@ -75,7 +75,7 @@
                         </div>
                         <div class="col-md-7">
                             <p>Type your URL here</p>
-                            <input type="text" class="form-control">
+                            <input type="text" class="form-control" v-model="formData.url">
                         </div>
                     </div>
                 </div>
@@ -126,12 +126,10 @@
                             <p>Your app's colors</p>
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <!-- <label for="">Main Color</label> -->
                                     <color-picker v-model="formData.settings.main_color" placeholder="Main Color" />
                                     <small v-if="false" class="text-danger"> This field is required </small>
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <!-- <label for="">Secondary Color</label> -->
                                     <color-picker v-model="formData.settings.secondary_color" placeholder="Secondary Color" />
                                     <small v-if="false" class="text-danger"> This field is required </small>
                                 </div>
@@ -184,8 +182,8 @@
                                     class="mr-3"
                                 >
                                     <input
-
                                         :id="filesystem"
+                                        v-model="formData.settings.filesystem"
                                         type="radio"
                                         name="project-type"
                                         :value="filesystem"
@@ -297,6 +295,10 @@
                 </div>
             </section-title>
         </div>
+
+        <button @click="sendData()" :disabled="isLoading">
+            Save Changes
+        </button>
     </div>
 </template>
 
@@ -307,14 +309,21 @@ import ProfileUploader from "@c/molecules/profile-uploader";
 import { mapState } from "vuex";
 
 export default {
-    name: "Home",
+    name: "SettingsApp",
     components: {
         SectionTitle,
         ColorPicker,
         ProfileUploader
     },
+    props: {
+        appSettings: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
+            isLoading: false,
             formData: {
                 name: "",
                 description:"",
@@ -382,10 +391,34 @@ export default {
     },
     computed: {
         ...mapState({
+            appData: state => state.Application.data,
             languages: state => state.Application.languages,
             timezones: state => state.Application.timezones,
             currencies: state => state.Application.currencies
         })
+    },
+    created() {
+        this.formData = {
+            name: this.appSettings.name,
+            description: this.appSettings.description,
+            payments_active: Boolean(this.appData.payments_active),
+            ecosystem_auth : Boolean(this.appData.ecosystem_auth),
+            is_public : Boolean(this.appData.is_public),
+            default_apps_plan_id: this.appData.default_apps_plan_id,
+            url: this.appData.url,
+            settings: {
+                project_type: this.appSettings.settings.project_type,
+                development_type: this.appSettings.settings.development_type,
+                logo: this.appSettings.settings.logo,
+                base_color: this.appSettings.settings.base_color,
+                main_color: this.appSettings.settings.base_color || this.appSettings.settings.main_color,
+                secondary_color: this.appSettings.settings.secondary_color,
+                filesystem: this.appSettings.settings.filesystem,
+                language: this.appSettings.settings.language,
+                timezone: this.appSettings.settings.timezone,
+                currency: this.appSettings.settings.currency
+            }
+        }
     },
     mounted() {
         this.getLeadsStats();
@@ -416,6 +449,23 @@ export default {
         updateProfile(profile) {
             this.formData.settings.logo = profile[0].url;
             this.formData.files = profile;
+        },
+        sendData() {
+            this.isLoading = true;
+            const formData = { ...this.formData }
+            delete formData.files;
+            formData.settings.base_color = formData.settings.main_color
+            formData.settings.currency = formData.settings.currency ? formData.settings.currency.currency : ""
+            formData.settings.language = formData.settings.language ? formData.settings.language.id : ""
+            formData.settings = JSON.stringify(formData.settings);
+
+            axios({
+                url: `/apps/${this.appData.id}`,
+                method: "PUT",
+                data: formData
+            }).finally(() => {
+                this.isLoading = false;
+            })
         }
     }
 };
