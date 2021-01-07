@@ -159,6 +159,7 @@ export default {
     }
 
 }
+
 .add-image__container {
     margin: auto;
     margin-bottom: 40px;
